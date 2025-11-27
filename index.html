@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Learning Pro - V2.3 FINAL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .header-left .subtitle {
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+
+        .settings-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s;
+        }
+
+        .settings-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        /* Setup Screen */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .setup-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .setup-card {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 600px;
+        }
+
+        .api-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1em;
+            font-family: monospace;
+            margin: 15px 0;
+        }
+
+        .api-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(30, 58, 138, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .info-box {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        /* Assessment */
+        .assessment-intro {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .progress-bar-container {
+            background: #e5e7eb;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%);
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        .question-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .question-type {
+            background: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .question-number {
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            color: #111827;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .audio-player {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .play-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            transition: all 0.3s;
+        }
+
+        .play-btn:hover {
+            background: #1e3a8a;
+            transform: scale(1.1);
+        }
+
+        .reading-text {
+            background: #f9fafb;
+            padding: 25px;
+            border-radius: 12px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-btn {
+            padding: 18px 24px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.05em;
+            text-align: left;
+            transition: all 0.3s;
+        }
+
+        .option-btn:hover {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+            transform: translateX(5px);
+        }
+
+        .option-btn.selected {
+            border-color: #3b82f6;
+            background: #dbeafe;
+            font-weight: 600;
+        }
+
+        /* Voice Recording */
+        .voice-container {
+            text-align: center;
+            padding: 40px;
+            background: #f9fafb;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .mic-btn {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: none;
+            font-size: 3em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .mic-btn.ready {
+            background: #10b981;
+            color: white;
+        }
+
+        .mic-btn.recording {
+            background: #ef4444;
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
+        }
+
+        .mic-status {
+            font-size: 1.2em;
+            color: #374151;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .mic-instruction {
+            color: #6b7280;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        .transcript-box {
+            background: white;
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 80px;
+            display: none;
+        }
+
+        .transcript-box.show {
+            display: block;
+        }
+
+        .transcript-text {
+            color: #111827;
+            line-height: 1.6;
+            font-size: 1.05em;
+        }
+
+        /* Writing */
+        .text-input {
+            width: 100%;
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1.05em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 150px;
+            line-height: 1.6;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .word-count {
+            color: #6b7280;
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+
+        /* Dashboard */
+        .coach-message {
+            background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%);
+            border-left: 6px solid #3b82f6;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .coach-avatar {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            font-size: 3em;
+            background: white;
+            border-radius: 50%;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .coach-content {
+            margin-left: 80px;
+        }
+
+        .coach-title {
+            font-size: 1.4em;
+            color: #1e3a8a;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .coach-text {
+            color: #374151;
+            line-height: 1.7;
+            font-size: 1.05em;
+        }
+
+        .coach-cta {
+            margin-top: 15px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .coach-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(30, 58, 138, 0.3);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .progress-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .skill-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .skill-card.weak {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .skill-card.medium {
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .skill-card.strong {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .priority-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ef4444;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .skill-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .skill-score {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .skill-card.weak .skill-score { color: #ef4444; }
+        .skill-card.medium .skill-score { color: #f59e0b; }
+        .skill-card.strong .skill-score { color: #10b981; }
+
+        /* Current Task */
+        .current-task {
+            background: white;
+            border: 3px solid #3b82f6;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+
+        .task-title {
+            font-size: 1.8em;
+            color: #1e3a8a;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .task-description {
+            color: #374151;
+            font-size: 1.1em;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .task-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #6b7280;
+        }
+
+        .why-section {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .why-title {
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+
+        /* Settings Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.8em;
+            color: #1e3a8a;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .setting-item {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            header {
+                padding: 15px 20px;
+            }
+
+            .header-left h1 {
+                font-size: 1.5em;
+            }
+
+            .coach-content {
+                margin-left: 0;
+                margin-top: 60px;
+            }
+
+            .coach-avatar {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .mic-btn {
+                width: 100px;
+                height: 100px;
+                font-size: 2.5em;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <h1>🎯 English Learning Pro</h1>
+                <p class="subtitle">V2.3 FINAL - Coaching Intelligent</p>
+            </div>
+            <button class="settings-btn" onclick="openSettings()">⚙️</button>
+        </header>
+
+        <div class="content">
+            <!-- Setup Screen -->
+            <div id="setupScreen" class="screen active">
+                <div class="setup-icon">🚀</div>
+                <div style="text-align: center;">
+                    <h2 style="color: #1e3a8a; font-size: 2.5em; margin-bottom: 20px;">
+                        Bienvenue !
+                    </h2>
+                    <p style="color: #6b7280; font-size: 1.1em; margin-bottom: 30px;">
+                        Commencez votre parcours d'apprentissage personnalisé
+                    </p>
+                </div>
+
+                <div class="setup-card">
+                    <h3 style="color: #1e3a8a; margin-bottom: 15px;">🔑 Configuration (optionnelle)</h3>
+                    <p style="color: #6b7280; margin-bottom: 15px;">
+                        Pour activer les corrections IA et conversations, entrez votre clé API Claude :
+                    </p>
+                    <input 
+                        type="password" 
+                        class="api-input" 
+                        id="setupApiKey" 
+                        placeholder="sk-ant-api03-... (optionnel)"
+                    >
+                    <div class="info-box">
+                        💡 Vous pouvez sauter cette étape et ajouter la clé plus tard dans les paramètres.
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn btn-primary" onclick="startAssessment()" style="font-size: 1.2em; padding: 18px 40px;">
+                        Commencer le test de niveau (20 min) →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Assessment Screen -->
+            <div id="assessmentScreen" class="screen">
+                <div class="assessment-intro" id="assessmentIntro">
+                    <h2 style="color: #1e3a8a; margin-bottom: 20px;">📊 Test de Niveau Complet</h2>
+                    <p style="color: #6b7280; font-size: 1.1em; margin-bottom: 30px;">
+                        Ce test évalue précisément vos 4 compétences en anglais
+                    </p>
+
+                    <div class="progress-overview" style="max-width: 800px; margin: 30px auto;">
+                        <div class="skill-card">
+                            <div class="skill-icon">👂</div>
+                            <div class="skill-name">Compréhension orale</div>
+                            <div style="color: #6b7280; margin-top: 8px;">5 questions audio</div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">📖</div>
+                            <div class="skill-name">Compréhension écrite</div>
+                            <div style="color: #6b7280; margin-top: 8px;">5 questions lecture</div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">🗣️</div>
+                            <div class="skill-name">Expression orale</div>
+                            <div style="color: #6b7280; margin-top: 8px;">5 enregistrements vocaux</div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">✍️</div>
+                            <div class="skill-name">Expression écrite</div>
+                            <div style="color: #6b7280; margin-top: 8px;">5 rédactions courtes</div>
+                        </div>
+                    </div>
+
+                    <div class="warning-box" style="max-width: 600px; margin: 30px auto;">
+                        ⚠️ <strong>Important :</strong> Assurez-vous d'avoir 20 minutes sans interruption. 
+                        Autorisez l'accès au microphone quand demandé.
+                    </div>
+
+                    <button class="btn btn-primary" onclick="beginAssessment()">
+                        Je suis prêt, commençons ! 🎯
+                    </button>
+                </div>
+
+                <div id="assessmentQuestions" class="hidden">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="assessmentProgress"></div>
+                    </div>
+
+                    <div class="question-card" id="questionCard">
+                        <!-- Questions loaded dynamically -->
+                    </div>
+
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="width: 100%;" disabled>
+                        Question suivante →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard -->
+            <div id="dashboard" class="screen">
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-number" id="userLevel">B1</div>
+                        <div class="stat-label">Niveau</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="completedTasks">0</div>
+                        <div class="stat-label">Tâches</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="streakDays">0</div>
+                        <div class="stat-label">Jours 🔥</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalXP">0</div>
+                        <div class="stat-label">XP</div>
+                    </div>
+                </div>
+
+                <div class="coach-message">
+                    <div class="coach-avatar">👨‍🏫</div>
+                    <div class="coach-content">
+                        <div class="coach-title" id="coachTitle">Chargement...</div>
+                        <div class="coach-text" id="coachText">Chargement de votre programme...</div>
+                        <button class="coach-cta" onclick="startCurrentTask()">
+                            Commencer l'activité →
+                        </button>
+                    </div>
+                </div>
+
+                <h3 style="color: #1e3a8a; margin-bottom: 20px;">📊 Votre progression</h3>
+                <div class="progress-overview" id="progressOverview">
+                    <!-- Skills loaded dynamically -->
+                </div>
+
+                <div class="current-task">
+                    <div class="task-title" id="taskTitle">Activité en cours</div>
+                    <div class="task-description" id="taskDescription">Chargement...</div>
+                    <div class="task-meta">
+                        <div class="task-meta-item">
+                            <span>⏱️</span>
+                            <span><strong>Durée :</strong> <span id="taskDuration">--</span></span>
+                        </div>
+                        <div class="task-meta-item">
+                            <span>⭐</span>
+                            <span><strong>XP :</strong> <span id="taskXP">--</span></span>
+                        </div>
+                    </div>
+                    <div class="why-section">
+                        <div class="why-title">💡 Pourquoi cette activité ?</div>
+                        <div id="taskWhy">Chargement...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">⚙️ Paramètres</h2>
+                <button class="close-btn" onclick="closeSettings()">&times;</button>
+            </div>
+
+            <div class="setting-item">
+                <label class="setting-label">🔑 Clé API Claude</label>
+                <input 
+                    type="password" 
+                    class="api-input" 
+                    id="settingsApiKey" 
+                    placeholder="sk-ant-api03-..."
+                >
+                <button class="btn btn-secondary" onclick="updateApiKey()" style="margin-top: 10px; width: 100%;">
+                    Sauvegarder
+                </button>
+            </div>
+
+            <div class="setting-item">
+                <label class="setting-label">📊 Statistiques</label>
+                <div style="background: #f9fafb; padding: 15px; border-radius: 8px;">
+                    <div style="margin-bottom: 10px;">
+                        <strong>Niveau :</strong> <span id="statsLevel">--</span>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Tâches complétées :</strong> <span id="statsCompleted">--</span>
+                    </div>
+                    <div>
+                        <strong>XP Total :</strong> <span id="statsXP">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <label class="setting-label">🔄 Actions</label>
+                <button class="btn btn-secondary" onclick="retakeAssessment()" style="width: 100%; margin-bottom: 10px;">
+                    Refaire le test de niveau
+                </button>
+                <button class="btn btn-secondary" onclick="resetData()" style="width: 100%; background: #fee2e2; color: #dc2626;">
+                    Réinitialiser toutes les données
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        let config = {
+            apiKey: null,
+            apiModel: 'claude-sonnet-4-20250514'
+        };
+
+        // User data
+        let userData = {
+            level: null,
+            skills: {
+                listening: 0,
+                reading: 0,
+                speaking: 0,
+                writing: 0
+            },
+            weakestSkill: null,
+            completedTasks: 0,
+            currentTaskIndex: 0,
+            streak: 0,
+            xp: 0,
+            assessmentComplete: false,
+            assessmentAnswers: []
+        };
+
+        // Assessment questions
+        const assessmentQuestions = [
+            // LISTENING (5 questions)
+            {
+                type: 'listening',
+                audioText: 'Hello, my name is Sarah. I work as a teacher in London. I have two children.',
+                question: 'What is Sarah\'s job?',
+                options: ['Doctor', 'Teacher', 'Engineer', 'Lawyer'],
+                correct: 1,
+                difficulty: 1
+            },
+            {
+                type: 'listening',
+                audioText: 'The meeting has been rescheduled from Tuesday to Thursday at 3 PM because the manager is unavailable.',
+                question: 'When is the new meeting time?',
+                options: ['Tuesday at 3 PM', 'Wednesday at 3 PM', 'Thursday at 3 PM', 'Friday at 3 PM'],
+                correct: 2,
+                difficulty: 2
+            },
+            {
+                type: 'listening',
+                audioText: 'Despite the challenging economic climate, our company managed to increase profits by fifteen percent last quarter.',
+                question: 'What happened to the company\'s profits?',
+                options: ['Decreased', 'Stayed the same', 'Increased by 15%', 'Increased by 50%'],
+                correct: 2,
+                difficulty: 3
+            },
+            {
+                type: 'listening',
+                audioText: 'I usually go to the gym three times a week, but this month I\'ve been too busy with work.',
+                question: 'Why isn\'t the person going to the gym?',
+                options: ['They are sick', 'Too busy with work', 'The gym is closed', 'They don\'t like it anymore'],
+                correct: 1,
+                difficulty: 2
+            },
+            {
+                type: 'listening',
+                audioText: 'The conference will address contemporary challenges in artificial intelligence, featuring speakers from diverse academic backgrounds.',
+                question: 'What is the main topic of the conference?',
+                options: ['History', 'Artificial Intelligence', 'Medicine', 'Business'],
+                correct: 1,
+                difficulty: 3
+            },
+
+            // READING (5 questions)
+            {
+                type: 'reading',
+                text: 'My favorite food is pizza. I like pizza with cheese and tomatoes. I eat pizza every Friday with my family at our favorite restaurant.',
+                question: 'When does the person eat pizza?',
+                options: ['Monday', 'Wednesday', 'Friday', 'Sunday'],
+                correct: 2,
+                difficulty: 1
+            },
+            {
+                type: 'reading',
+                text: 'The library is open from Monday to Saturday, 9 AM to 6 PM. On Sundays, it is closed for maintenance and restocking.',
+                question: 'What happens on Sundays?',
+                options: ['Opens at 10 AM', 'Closes at 5 PM', 'Open all day', 'Closed for maintenance'],
+                correct: 3,
+                difficulty: 2
+            },
+            {
+                type: 'reading',
+                text: 'Remote work has become increasingly popular. While it offers flexibility and eliminates commuting, it can also lead to feelings of isolation and difficulty separating work from personal life.',
+                question: 'What is mentioned as a disadvantage of remote work?',
+                options: ['Higher costs', 'Longer commute', 'Feelings of isolation', 'Less flexibility'],
+                correct: 2,
+                difficulty: 2
+            },
+            {
+                type: 'reading',
+                text: 'Climate change poses one of the greatest challenges to humanity. Rising temperatures, extreme weather events, and sea level rise threaten ecosystems and communities worldwide.',
+                question: 'According to the text, what threatens ecosystems?',
+                options: ['Only rising temperatures', 'Only extreme weather', 'Climate change effects', 'Only sea level rise'],
+                correct: 2,
+                difficulty: 3
+            },
+            {
+                type: 'reading',
+                text: 'The protagonist\'s journey from innocence to experience mirrors the novel\'s exploration of societal transformation during the industrial revolution.',
+                question: 'What does the novel explore?',
+                options: ['Modern technology', 'Societal transformation', 'Space exploration', 'Ancient history'],
+                correct: 1,
+                difficulty: 3
+            },
+
+            // SPEAKING (5 questions)
+            {
+                type: 'speaking',
+                prompt: 'Introduce yourself in English. Say your name, where you\'re from, and what you do.',
+                minWords: 15,
+                difficulty: 1
+            },
+            {
+                type: 'speaking',
+                prompt: 'Describe your daily routine. What do you do in the morning?',
+                minWords: 20,
+                difficulty: 2
+            },
+            {
+                type: 'speaking',
+                prompt: 'Talk about your favorite hobby or activity. Why do you enjoy it?',
+                minWords: 25,
+                difficulty: 2
+            },
+            {
+                type: 'speaking',
+                prompt: 'Explain why learning English is important to you. Give at least two reasons.',
+                minWords: 30,
+                difficulty: 2
+            },
+            {
+                type: 'speaking',
+                prompt: 'Discuss the advantages and disadvantages of using social media.',
+                minWords: 40,
+                difficulty: 3
+            },
+
+            // WRITING (5 questions)
+            {
+                type: 'writing',
+                prompt: 'Write 3-4 sentences about your favorite season and why you like it.',
+                minWords: 25,
+                difficulty: 1
+            },
+            {
+                type: 'writing',
+                prompt: 'Write a short paragraph about your dream vacation destination. Where would you go and why?',
+                minWords: 40,
+                difficulty: 2
+            },
+            {
+                type: 'writing',
+                prompt: 'Write an email to a friend inviting them to your birthday party. Include the date, time, and location.',
+                minWords: 50,
+                difficulty: 2
+            },
+            {
+                type: 'writing',
+                prompt: 'Write about a memorable experience from your childhood. Describe what happened and how you felt.',
+                minWords: 60,
+                difficulty: 2
+            },
+            {
+                type: 'writing',
+                prompt: 'Write an argumentative paragraph: Should universities offer free education? Take a position and support it with reasons.',
+                minWords: 80,
+                difficulty: 3
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let isRecording = false;
+        let recognition = null;
+        let currentTranscript = '';
+
+        // Initialize speech recognition
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.continuous = true; // Keep recording
+            recognition.interimResults = true;
+        }
+
+        // Initialize
+        function initApp() {
+            loadConfig();
+            loadUserData();
+
+            if (userData.assessmentComplete) {
+                showDashboard();
+            }
+        }
+
+        function loadConfig() {
+            const saved = localStorage.getItem('englishLearningConfig_v23');
+            if (saved) {
+                config = { ...config, ...JSON.parse(saved) };
+            }
+        }
+
+        function saveConfig() {
+            localStorage.setItem('englishLearningConfig_v23', JSON.stringify(config));
+        }
+
+        function loadUserData() {
+            const saved = localStorage.getItem('englishLearningData_v23');
+            if (saved) {
+                userData = { ...userData, ...JSON.parse(saved) };
+            }
+        }
+
+        function saveUserData() {
+            localStorage.setItem('englishLearningData_v23', JSON.stringify(userData));
+        }
+
+        function startAssessment() {
+            const apiKey = document.getElementById('setupApiKey').value.trim();
+            if (apiKey && apiKey.startsWith('sk-ant-')) {
+                config.apiKey = apiKey;
+                saveConfig();
+            }
+
+            document.getElementById('setupScreen').classList.remove('active');
+            document.getElementById('assessmentScreen').classList.add('active');
+        }
+
+        function beginAssessment() {
+            document.getElementById('assessmentIntro').classList.add('hidden');
+            document.getElementById('assessmentQuestions').classList.remove('hidden');
+            currentQuestionIndex = 0;
+            userData.assessmentAnswers = [];
+            loadQuestion(0);
+        }
+
+        function loadQuestion(index) {
+            if (index >= assessmentQuestions.length) {
+                finishAssessment();
+                return;
+            }
+
+            const question = assessmentQuestions[index];
+            const card = document.getElementById('questionCard');
+            
+            const progress = ((index + 1) / assessmentQuestions.length) * 100;
+            document.getElementById('assessmentProgress').style.width = `${progress}%`;
+
+            let html = `
+                <div class="question-header">
+                    <div class="question-type">${getTypeName(question.type)}</div>
+                    <div class="question-number">Question ${index + 1}/${assessmentQuestions.length}</div>
+                </div>
+            `;
+
+            if (question.type === 'listening') {
+                html += `
+                    <div class="audio-player">
+                        <button class="play-btn" onclick="playAudio('${question.audioText}')">▶️</button>
+                        <div>
+                            <div style="font-weight: 600;">Écoutez l'audio</div>
+                            <div style="font-size: 0.9em; color: #6b7280; margin-top: 5px;">
+                                Vous pouvez écouter plusieurs fois
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="options-grid">
+                        ${question.options.map((opt, idx) => `
+                            <button class="option-btn" onclick="selectOption(${idx})">${opt}</button>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (question.type === 'reading') {
+                html += `
+                    <div class="reading-text">${question.text}</div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="options-grid">
+                        ${question.options.map((opt, idx) => `
+                            <button class="option-btn" onclick="selectOption(${idx})">${opt}</button>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (question.type === 'speaking') {
+                html += `
+                    <div class="question-text">${question.prompt}</div>
+                    <div class="voice-container">
+                        <button class="mic-btn ready" id="micBtn" onclick="toggleRecording()">🎤</button>
+                        <div class="mic-status" id="micStatus">Cliquez pour commencer à parler</div>
+                        <div class="mic-instruction">
+                            📍 Cliquez sur le micro pour <strong>COMMENCER</strong><br>
+                            📍 Parlez autant que vous voulez (pauses autorisées)<br>
+                            📍 Cliquez à nouveau pour <strong>ARRÊTER</strong>
+                        </div>
+                        <div class="transcript-box" id="transcriptBox">
+                            <strong>Votre réponse :</strong>
+                            <div class="transcript-text" id="transcriptText"></div>
+                        </div>
+                    </div>
+                `;
+            } else if (question.type === 'writing') {
+                html += `
+                    <div class="question-text">${question.prompt}</div>
+                    <textarea 
+                        class="text-input" 
+                        id="writingInput" 
+                        placeholder="Écrivez votre réponse ici en anglais..."
+                        oninput="checkWritingInput(${question.minWords})"
+                    ></textarea>
+                    <div class="word-count">
+                        <span id="wordCount">0</span> / ${question.minWords} mots minimum
+                    </div>
+                `;
+            }
+
+            card.innerHTML = html;
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        function getTypeName(type) {
+            const names = {
+                'listening': '👂 Compréhension orale',
+                'reading': '📖 Compréhension écrite',
+                'speaking': '🗣️ Expression orale',
+                'writing': '✍️ Expression écrite'
+            };
+            return names[type];
+        }
+
+        function playAudio(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            speechSynthesis.speak(utterance);
+        }
+
+        function selectOption(index) {
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach((btn, idx) => {
+                btn.classList.remove('selected');
+                if (idx === index) {
+                    btn.classList.add('selected');
+                }
+            });
+
+            const question = assessmentQuestions[currentQuestionIndex];
+            const isCorrect = index === question.correct;
+            
+            userData.assessmentAnswers.push({
+                type: question.type,
+                difficulty: question.difficulty,
+                correct: isCorrect,
+                score: isCorrect ? 100 : 0
+            });
+
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function toggleRecording() {
+            if (!recognition) {
+                alert('La reconnaissance vocale n\'est pas supportée. Utilisez Chrome ou Edge.');
+                return;
+            }
+
+            const micBtn = document.getElementById('micBtn');
+            const status = document.getElementById('micStatus');
+            const transcriptBox = document.getElementById('transcriptBox');
+
+            if (!isRecording) {
+                // START recording
+                currentTranscript = '';
+                recognition.start();
+                isRecording = true;
+                micBtn.classList.remove('ready');
+                micBtn.classList.add('recording');
+                micBtn.textContent = '⏹️';
+                status.textContent = '🔴 ENREGISTREMENT EN COURS... Cliquez pour arrêter';
+                transcriptBox.classList.remove('show');
+            } else {
+                // STOP recording
+                recognition.stop();
+                isRecording = false;
+                micBtn.classList.remove('recording');
+                micBtn.classList.add('ready');
+                micBtn.textContent = '🎤';
+                status.textContent = '✅ Enregistrement terminé';
+                
+                // Show transcript
+                document.getElementById('transcriptText').textContent = currentTranscript || '(Aucun texte capté)';
+                transcriptBox.classList.add('show');
+
+                // Evaluate
+                const question = assessmentQuestions[currentQuestionIndex];
+                const wordCount = currentTranscript.split(/\s+/).filter(w => w.length > 0).length;
+                const score = evaluateSpeaking(currentTranscript, question.minWords);
+
+                userData.assessmentAnswers.push({
+                    type: 'speaking',
+                    difficulty: question.difficulty,
+                    text: currentTranscript,
+                    score: score,
+                    wordCount: wordCount
+                });
+
+                document.getElementById('nextBtn').disabled = false;
+            }
+
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                let finalTranscript = '';
+
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript + ' ';
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+
+                currentTranscript += finalTranscript;
+                
+                // Show real-time transcript
+                if (isRecording) {
+                    const display = currentTranscript + interimTranscript;
+                    document.getElementById('micStatus').textContent = `🔴 "${display}"`;
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                isRecording = false;
+                micBtn.classList.remove('recording');
+                micBtn.classList.add('ready');
+                micBtn.textContent = '🎤';
+                status.textContent = '❌ Erreur. Réessayez.';
+            };
+        }
+
+        function evaluateSpeaking(text, minWords) {
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+            const wordCount = words.length;
+
+            if (wordCount === 0) return 0;
+            if (wordCount < minWords * 0.5) return 20;
+            if (wordCount < minWords) return 50;
+            if (wordCount >= minWords) return 80;
+        }
+
+        function checkWritingInput(minWords) {
+            const input = document.getElementById('writingInput').value;
+            const words = input.trim().split(/\s+/).filter(w => w.length > 0);
+            const wordCount = words.length;
+
+            document.getElementById('wordCount').textContent = wordCount;
+
+            if (wordCount >= minWords) {
+                const question = assessmentQuestions[currentQuestionIndex];
+                const score = evaluateWriting(input, minWords);
+
+                // Update or add answer
+                const lastAnswer = userData.assessmentAnswers[userData.assessmentAnswers.length - 1];
+                if (lastAnswer && lastAnswer.type === 'writing') {
+                    lastAnswer.text = input;
+                    lastAnswer.score = score;
+                    lastAnswer.wordCount = wordCount;
+                } else {
+                    userData.assessmentAnswers.push({
+                        type: 'writing',
+                        difficulty: question.difficulty,
+                        text: input,
+                        score: score,
+                        wordCount: wordCount
+                    });
+                }
+
+                document.getElementById('nextBtn').disabled = false;
+            } else {
+                document.getElementById('nextBtn').disabled = true;
+            }
+        }
+
+        function evaluateWriting(text, minWords) {
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+            const wordCount = words.length;
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+
+            let score = 0;
+
+            // Length
+            if (wordCount >= minWords) score += 30;
+            else score += (wordCount / minWords) * 30;
+
+            // Sentence structure
+            if (sentences.length >= 3) score += 20;
+
+            // Capitalization
+            const properCaps = sentences.filter(s => /^[A-Z]/.test(s.trim())).length;
+            score += (properCaps / sentences.length) * 20;
+
+            // Vocabulary diversity
+            const uniqueWords = new Set(words.map(w => w.toLowerCase()));
+            const diversity = uniqueWords.size / words.length;
+            score += diversity * 30;
+
+            return Math.min(100, Math.round(score));
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            loadQuestion(currentQuestionIndex);
+        }
+
+        function finishAssessment() {
+            // Calculate scores per skill
+            const skillScores = {
+                listening: [],
+                reading: [],
+                speaking: [],
+                writing: []
+            };
+
+            userData.assessmentAnswers.forEach(answer => {
+                skillScores[answer.type].push(answer.score);
+            });
+
+            // Calculate averages with strict grading
+            Object.keys(skillScores).forEach(skill => {
+                const scores = skillScores[skill];
+                if (scores.length > 0) {
+                    const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+                    // Apply penalty for consistency
+                    const variance = scores.map(s => Math.abs(s - avg)).reduce((a, b) => a + b, 0) / scores.length;
+                    const penalty = variance > 20 ? 5 : 0;
+                    userData.skills[skill] = Math.max(0, Math.round(avg - penalty));
+                }
+            });
+
+            // Determine level (strict)
+            const overallScore = Object.values(userData.skills).reduce((a, b) => a + b, 0) / 4;
+            userData.level = determineLevel(overallScore);
+
+            // Find weakest skill
+            userData.weakestSkill = Object.keys(userData.skills).reduce((a, b) => 
+                userData.skills[a] < userData.skills[b] ? a : b
+            );
+
+            userData.assessmentComplete = true;
+            saveUserData();
+
+            showDashboard();
+        }
+
+        function determineLevel(score) {
+            // Strict evaluation
+            if (score < 30) return 'A1';
+            if (score < 45) return 'A2';
+            if (score < 60) return 'B1';
+            if (score < 75) return 'B2';
+            if (score < 90) return 'C1';
+            return 'C2';
+        }
+
+        function showDashboard() {
+            document.getElementById('assessmentScreen').classList.remove('active');
+            document.getElementById('dashboard').classList.add('active');
+            updateDashboard();
+        }
+
+        function updateDashboard() {
+            document.getElementById('userLevel').textContent = userData.level;
+            document.getElementById('completedTasks').textContent = userData.completedTasks;
+            document.getElementById('streakDays').textContent = userData.streak;
+            document.getElementById('totalXP').textContent = userData.xp;
+
+            // Coach message
+            const skillName = {
+                listening: 'compréhension orale',
+                reading: 'compréhension écrite',
+                speaking: 'expression orale',
+                writing: 'expression écrite'
+            }[userData.weakestSkill];
+
+            document.getElementById('coachTitle').textContent = `Bonjour ! Votre niveau est ${userData.level}`;
+            document.getElementById('coachText').textContent = `J'ai analysé vos résultats. Votre point à améliorer est la ${skillName} (${userData.skills[userData.weakestSkill]}%). Commençons par renforcer cette compétence avec des exercices ciblés.`;
+
+            // Progress overview
+            const container = document.getElementById('progressOverview');
+            const skillInfo = {
+                listening: { icon: '👂', name: 'Écoute' },
+                reading: { icon: '📖', name: 'Lecture' },
+                speaking: { icon: '🗣️', name: 'Oral' },
+                writing: { icon: '✍️', name: 'Écrit' }
+            };
+
+            container.innerHTML = Object.keys(userData.skills).map(skill => {
+                const score = userData.skills[skill];
+                const status = score < 50 ? 'weak' : score < 75 ? 'medium' : 'strong';
+                const isPriority = skill === userData.weakestSkill;
+
+                return `
+                    <div class="skill-card ${status}">
+                        ${isPriority ? '<div class="priority-badge">PRIORITÉ</div>' : ''}
+                        <div class="skill-icon">${skillInfo[skill].icon}</div>
+                        <div class="skill-name">${skillInfo[skill].name}</div>
+                        <div class="skill-score">${score}%</div>
+                    </div>
+                `;
+            }).join('');
+
+            // Current task
+            document.getElementById('taskTitle').textContent = `Améliorer votre ${skillName}`;
+            document.getElementById('taskDescription').textContent = 'Exercice interactif adapté à votre niveau';
+            document.getElementById('taskDuration').textContent = '15 minutes';
+            document.getElementById('taskXP').textContent = '+60 XP';
+            document.getElementById('taskWhy').textContent = `C'est votre compétence prioritaire. En vous concentrant dessus maintenant, vous construisez une base solide.`;
+        }
+
+        function startCurrentTask() {
+            alert('🎯 Fonctionnalité en développement\n\nLes exercices interactifs seront bientôt disponibles !');
+            
+            // Simulate completion
+            userData.completedTasks++;
+            userData.xp += 60;
+            userData.skills[userData.weakestSkill] = Math.min(100, userData.skills[userData.weakestSkill] + 3);
+            saveUserData();
+            updateDashboard();
+        }
+
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('active');
+            document.getElementById('settingsApiKey').value = config.apiKey || '';
+            document.getElementById('statsLevel').textContent = userData.level || '--';
+            document.getElementById('statsCompleted').textContent = userData.completedTasks;
+            document.getElementById('statsXP').textContent = userData.xp;
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        function updateApiKey() {
+            const key = document.getElementById('settingsApiKey').value.trim();
+            if (key && key.startsWith('sk-ant-')) {
+                config.apiKey = key;
+                saveConfig();
+                alert('✅ Clé API sauvegardée !');
+            } else if (key) {
+                alert('❌ Clé API invalide (doit commencer par sk-ant-)');
+            }
+        }
+
+        function retakeAssessment() {
+            if (confirm('Refaire le test de niveau ? Vos résultats actuels seront remplacés.')) {
+                userData.assessmentComplete = false;
+                userData.assessmentAnswers = [];
+                saveUserData();
+                location.reload();
+            }
+        }
+
+        function resetData() {
+            if (confirm('⚠️ ATTENTION !\n\nSupprimer toutes vos données ?\n\nCette action est irréversible.')) {
+                if (confirm('Dernière confirmation : Êtes-vous sûr ?')) {
+                    localStorage.clear();
+                    location.reload();
+                }
+            }
+        }
+
+        // Initialize
+        window.onload = initApp;
+
+        // Auto-save
+        setInterval(saveUserData, 30000);
+    </script>
+</body>
+</html>
