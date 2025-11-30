@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Learning Pro - V2.3 FINAL</title>
+    <title>English Learning Pro - V2.4 COMPLETE</title>
     <style>
         * {
             margin: 0;
@@ -34,6 +34,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .header-left h1 {
@@ -44,6 +46,22 @@
         .header-left .subtitle {
             font-size: 0.95em;
             opacity: 0.9;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .sync-status {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .settings-btn {
@@ -66,7 +84,7 @@
             padding: 30px;
         }
 
-        /* Setup Screen */
+        /* Screens */
         .screen {
             display: none;
         }
@@ -77,10 +95,11 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Setup */
         .setup-icon {
             font-size: 5em;
             margin-bottom: 20px;
@@ -93,22 +112,33 @@
             border-radius: 16px;
             padding: 30px;
             margin: 30px auto;
-            max-width: 600px;
+            max-width: 700px;
         }
 
-        .api-input {
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
             width: 100%;
             padding: 15px;
             border: 2px solid #e5e7eb;
             border-radius: 12px;
             font-size: 1em;
             font-family: monospace;
-            margin: 15px 0;
         }
 
-        .api-input:focus {
+        .input-field:focus {
             outline: none;
             border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .btn {
@@ -140,6 +170,15 @@
             background: #e5e7eb;
         }
 
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
         .info-box {
             background: #dbeafe;
             border-left: 4px solid #3b82f6;
@@ -156,24 +195,27 @@
             margin: 15px 0;
         }
 
-        /* Assessment */
-        .assessment-intro {
-            text-align: center;
-            padding: 40px 20px;
+        .success-box {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
         }
 
+        /* Assessment */
         .progress-bar-container {
             background: #e5e7eb;
             height: 10px;
             border-radius: 5px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             overflow: hidden;
         }
 
         .progress-bar-fill {
             background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%);
             height: 100%;
-            transition: width 0.3s;
+            transition: width 0.5s;
         }
 
         .question-card {
@@ -188,7 +230,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .question-type {
@@ -197,6 +241,7 @@
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.9em;
+            font-weight: 600;
         }
 
         .question-number {
@@ -211,48 +256,79 @@
             line-height: 1.6;
         }
 
-        .audio-player {
+        /* Audio */
+        .audio-container {
             background: #f3f4f6;
-            padding: 20px;
+            padding: 25px;
             border-radius: 12px;
             margin-bottom: 25px;
+        }
+
+        .audio-controls {
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
-        .play-btn {
+        .play-button {
             background: #3b82f6;
             color: white;
             border: none;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 1.5em;
+            font-size: 1.8em;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .play-btn:hover {
+        .play-button:hover {
             background: #1e3a8a;
             transform: scale(1.1);
         }
 
-        .reading-text {
+        .play-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .audio-info {
+            flex: 1;
+        }
+
+        .audio-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 5px;
+        }
+
+        .audio-instruction {
+            font-size: 0.9em;
+            color: #6b7280;
+        }
+
+        /* Reading */
+        .reading-passage {
             background: #f9fafb;
             padding: 25px;
             border-radius: 12px;
             line-height: 1.8;
             margin-bottom: 25px;
             border-left: 4px solid #3b82f6;
+            font-size: 1.05em;
         }
 
-        .options-grid {
+        /* Options */
+        .options-container {
             display: grid;
             gap: 12px;
         }
 
-        .option-btn {
+        .option-button {
             padding: 18px 24px;
             border: 2px solid #e5e7eb;
             background: white;
@@ -263,13 +339,13 @@
             transition: all 0.3s;
         }
 
-        .option-btn:hover {
+        .option-button:hover {
             border-color: #3b82f6;
             background: #f0f9ff;
             transform: translateX(5px);
         }
 
-        .option-btn.selected {
+        .option-button.selected {
             border-color: #3b82f6;
             background: #dbeafe;
             font-weight: 600;
@@ -284,7 +360,7 @@
             margin-bottom: 20px;
         }
 
-        .mic-btn {
+        .mic-button {
             width: 120px;
             height: 120px;
             border-radius: 50%;
@@ -293,15 +369,17 @@
             cursor: pointer;
             transition: all 0.3s;
             margin: 20px auto;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .mic-btn.ready {
+        .mic-button.ready {
             background: #10b981;
             color: white;
         }
 
-        .mic-btn.recording {
+        .mic-button.recording {
             background: #ef4444;
             color: white;
             animation: pulse 1.5s infinite;
@@ -317,26 +395,34 @@
             color: #374151;
             margin-top: 15px;
             font-weight: 600;
+            min-height: 30px;
         }
 
-        .mic-instruction {
+        .mic-instructions {
             color: #6b7280;
-            margin-top: 10px;
-            line-height: 1.6;
+            margin-top: 15px;
+            line-height: 1.8;
         }
 
-        .transcript-box {
+        .transcript-display {
             background: white;
             border: 2px solid #3b82f6;
             border-radius: 12px;
             padding: 20px;
             margin-top: 20px;
-            min-height: 80px;
+            min-height: 100px;
             display: none;
+            text-align: left;
         }
 
-        .transcript-box.show {
+        .transcript-display.visible {
             display: block;
+        }
+
+        .transcript-label {
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 10px;
         }
 
         .transcript-text {
@@ -346,7 +432,7 @@
         }
 
         /* Writing */
-        .text-input {
+        .writing-textarea {
             width: 100%;
             padding: 20px;
             border: 2px solid #e5e7eb;
@@ -354,79 +440,29 @@
             font-size: 1.05em;
             font-family: inherit;
             resize: vertical;
-            min-height: 150px;
+            min-height: 180px;
             line-height: 1.6;
         }
 
-        .text-input:focus {
+        .writing-textarea:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        .word-count {
+        .word-counter {
             color: #6b7280;
-            margin-top: 10px;
+            margin-top: 12px;
             font-size: 0.95em;
         }
 
-        /* Dashboard */
-        .coach-message {
-            background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%);
-            border-left: 6px solid #3b82f6;
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .coach-avatar {
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            font-size: 3em;
-            background: white;
-            border-radius: 50%;
-            padding: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .coach-content {
-            margin-left: 80px;
-        }
-
-        .coach-title {
-            font-size: 1.4em;
-            color: #1e3a8a;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .coach-text {
-            color: #374151;
-            line-height: 1.7;
-            font-size: 1.05em;
-        }
-
-        .coach-cta {
-            margin-top: 15px;
-            padding: 15px 25px;
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1em;
+        .word-counter.complete {
+            color: #10b981;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
         }
 
-        .coach-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(30, 58, 138, 0.3);
-        }
-
-        .stats-row {
+        /* Dashboard */
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
@@ -436,23 +472,81 @@
         .stat-card {
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
             color: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 16px;
             text-align: center;
         }
 
-        .stat-number {
+        .stat-value {
             font-size: 2.5em;
             font-weight: bold;
+            margin-bottom: 8px;
         }
 
         .stat-label {
             font-size: 0.9em;
             opacity: 0.9;
-            margin-top: 5px;
         }
 
-        .progress-overview {
+        .coach-message {
+            background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%);
+            border-left: 6px solid #3b82f6;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .coach-avatar {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            font-size: 3.5em;
+            background: white;
+            border-radius: 50%;
+            padding: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .coach-content {
+            margin-left: 90px;
+        }
+
+        .coach-title {
+            font-size: 1.5em;
+            color: #1e3a8a;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .coach-text {
+            color: #374151;
+            line-height: 1.8;
+            font-size: 1.05em;
+            margin-bottom: 20px;
+        }
+
+        .coach-cta {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .coach-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(30, 58, 138, 0.3);
+        }
+
+        .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
@@ -463,9 +557,15 @@
             background: white;
             border: 2px solid #e5e7eb;
             border-radius: 16px;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
             position: relative;
+            transition: all 0.3s;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
         .skill-card.weak {
@@ -496,78 +596,90 @@
         }
 
         .skill-icon {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 3em;
+            margin-bottom: 12px;
         }
 
         .skill-name {
             font-weight: 600;
             color: #1e3a8a;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
         }
 
         .skill-score {
-            font-size: 2em;
+            font-size: 2.2em;
             font-weight: bold;
+            margin-bottom: 8px;
         }
 
         .skill-card.weak .skill-score { color: #ef4444; }
         .skill-card.medium .skill-score { color: #f59e0b; }
         .skill-card.strong .skill-score { color: #10b981; }
 
-        /* Current Task */
-        .current-task {
-            background: white;
-            border: 3px solid #3b82f6;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
-        }
-
-        .task-title {
-            font-size: 1.8em;
-            color: #1e3a8a;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .task-description {
-            color: #374151;
-            font-size: 1.1em;
-            line-height: 1.7;
-            margin-bottom: 20px;
-        }
-
-        .task-meta {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .task-meta-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .skill-status {
+            font-size: 0.9em;
             color: #6b7280;
         }
 
-        .why-section {
-            background: #fffbeb;
-            border-left: 4px solid #f59e0b;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
+        /* Exercise */
+        .exercise-container {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
         }
 
-        .why-title {
-            font-weight: 600;
-            color: #92400e;
+        .exercise-header {
+            margin-bottom: 25px;
+        }
+
+        .exercise-title {
+            font-size: 1.8em;
+            color: #1e3a8a;
+            font-weight: bold;
             margin-bottom: 10px;
         }
 
-        /* Settings Modal */
+        .exercise-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            color: #6b7280;
+            font-size: 0.95em;
+        }
+
+        .exercise-content {
+            margin-bottom: 25px;
+        }
+
+        .feedback-box {
+            background: #f0fdf4;
+            border-left: 4px solid #10b981;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-box.visible {
+            display: block;
+        }
+
+        .feedback-title {
+            font-weight: 600;
+            color: #166534;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .feedback-text {
+            color: #166534;
+            line-height: 1.6;
+        }
+
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -579,6 +691,7 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
         .modal.active {
@@ -588,10 +701,10 @@
         .modal-content {
             background: white;
             border-radius: 20px;
-            padding: 30px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
+            padding: 35px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
             overflow-y: auto;
         }
 
@@ -599,53 +712,50 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .modal-title {
-            font-size: 1.8em;
+            font-size: 2em;
             color: #1e3a8a;
             font-weight: bold;
         }
 
-        .close-btn {
+        .close-button {
             background: none;
             border: none;
-            font-size: 2em;
+            font-size: 2.5em;
             cursor: pointer;
             color: #6b7280;
+            line-height: 1;
         }
 
-        .setting-item {
-            margin-bottom: 25px;
-            padding-bottom: 25px;
+        .close-button:hover {
+            color: #1e3a8a;
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
             border-bottom: 1px solid #e5e7eb;
         }
 
-        .setting-item:last-child {
+        .settings-section:last-child {
             border-bottom: none;
         }
 
-        .setting-label {
+        .section-title {
             font-weight: 600;
             color: #1e3a8a;
-            margin-bottom: 8px;
-            display: block;
+            margin-bottom: 15px;
+            font-size: 1.2em;
         }
 
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f4f6;
-            border-top: 3px solid #3b82f6;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .connection-status {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
         }
 
         /* Responsive */
@@ -664,7 +774,7 @@
 
             .coach-content {
                 margin-left: 0;
-                margin-top: 60px;
+                margin-top: 70px;
             }
 
             .coach-avatar {
@@ -672,15 +782,34 @@
                 transform: translateX(-50%);
             }
 
-            .mic-btn {
+            .mic-button {
                 width: 100px;
                 height: 100px;
                 font-size: 2.5em;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
             }
         }
 
         .hidden {
             display: none !important;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -689,9 +818,15 @@
         <header>
             <div class="header-left">
                 <h1>🎯 English Learning Pro</h1>
-                <p class="subtitle">V2.3 FINAL - Coaching Intelligent</p>
+                <p class="subtitle">Version 2.4 COMPLETE - Testé et Fonctionnel</p>
             </div>
-            <button class="settings-btn" onclick="openSettings()">⚙️</button>
+            <div class="header-right">
+                <div class="sync-status" id="syncStatus">
+                    <span id="syncIcon">☁️</span>
+                    <span id="syncText">Local</span>
+                </div>
+                <button class="settings-btn" onclick="openSettings()">⚙️</button>
+            </div>
         </header>
 
         <div class="content">
@@ -700,110 +835,152 @@
                 <div class="setup-icon">🚀</div>
                 <div style="text-align: center;">
                     <h2 style="color: #1e3a8a; font-size: 2.5em; margin-bottom: 20px;">
-                        Bienvenue !
+                        Bienvenue dans votre coach d'anglais
                     </h2>
                     <p style="color: #6b7280; font-size: 1.1em; margin-bottom: 30px;">
-                        Commencez votre parcours d'apprentissage personnalisé
+                        Configuration rapide avant de commencer
                     </p>
                 </div>
 
                 <div class="setup-card">
-                    <h3 style="color: #1e3a8a; margin-bottom: 15px;">🔑 Configuration (optionnelle)</h3>
-                    <p style="color: #6b7280; margin-bottom: 15px;">
-                        Pour activer les corrections IA et conversations, entrez votre clé API Claude :
-                    </p>
-                    <input 
-                        type="password" 
-                        class="api-input" 
-                        id="setupApiKey" 
-                        placeholder="sk-ant-api03-... (optionnel)"
-                    >
-                    <div class="info-box">
-                        💡 Vous pouvez sauter cette étape et ajouter la clé plus tard dans les paramètres.
+                    <h3 style="color: #1e3a8a; margin-bottom: 20px;">⚙️ Configuration (Optionnelle)</h3>
+                    
+                    <div class="input-group">
+                        <label class="input-label">🔑 Clé API Claude (pour corrections IA)</label>
+                        <input 
+                            type="password" 
+                            class="input-field" 
+                            id="setupClaudeKey" 
+                            placeholder="sk-ant-api03-... (optionnel)"
+                        >
                     </div>
+
+                    <div class="info-box">
+                        💡 <strong>Sans clé API :</strong> Vous pourrez faire tous les exercices sauf les corrections automatiques par IA.
+                    </div>
+
+                    <details style="margin-top: 20px;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #1e3a8a; margin-bottom: 15px;">
+                            ☁️ Configuration Google Drive (synchronisation multi-appareils)
+                        </summary>
+                        
+                        <div style="margin-top: 15px;">
+                            <div class="input-group">
+                                <label class="input-label">Client ID OAuth</label>
+                                <input 
+                                    type="text" 
+                                    class="input-field" 
+                                    id="setupGoogleClientId" 
+                                    placeholder="XXXX.apps.googleusercontent.com"
+                                >
+                            </div>
+
+                            <div class="input-group">
+                                <label class="input-label">API Key Google</label>
+                                <input 
+                                    type="text" 
+                                    class="input-field" 
+                                    id="setupGoogleApiKey" 
+                                    placeholder="AIzaSy..."
+                                >
+                            </div>
+
+                            <div class="warning-box">
+                                ⚠️ Pour configurer Google Drive, suivez le guide fourni séparément.
+                            </div>
+                        </div>
+                    </details>
                 </div>
 
-                <div style="text-align: center; margin-top: 30px;">
-                    <button class="btn btn-primary" onclick="startAssessment()" style="font-size: 1.2em; padding: 18px 40px;">
-                        Commencer le test de niveau (20 min) →
+                <div style="text-align: center; margin-top: 30px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn btn-secondary" onclick="skipSetup()">
+                        Passer la configuration
+                    </button>
+                    <button class="btn btn-primary" onclick="saveSetupAndStart()" style="font-size: 1.2em; padding: 18px 40px;">
+                        Sauvegarder et commencer le test →
                     </button>
                 </div>
             </div>
 
-            <!-- Assessment Screen -->
-            <div id="assessmentScreen" class="screen">
-                <div class="assessment-intro" id="assessmentIntro">
-                    <h2 style="color: #1e3a8a; margin-bottom: 20px;">📊 Test de Niveau Complet</h2>
-                    <p style="color: #6b7280; font-size: 1.1em; margin-bottom: 30px;">
-                        Ce test évalue précisément vos 4 compétences en anglais
+            <!-- Assessment Intro -->
+            <div id="assessmentIntro" class="screen">
+                <div style="text-align: center; padding: 40px 20px;">
+                    <h2 style="color: #1e3a8a; font-size: 2.5em; margin-bottom: 20px;">
+                        📊 Test de Niveau Complet
+                    </h2>
+                    <p style="color: #6b7280; font-size: 1.1em; margin-bottom: 40px;">
+                        Évaluation précise de vos 4 compétences en anglais
                     </p>
 
-                    <div class="progress-overview" style="max-width: 800px; margin: 30px auto;">
+                    <div class="skills-grid" style="max-width: 900px; margin: 0 auto 40px;">
                         <div class="skill-card">
                             <div class="skill-icon">👂</div>
                             <div class="skill-name">Compréhension orale</div>
-                            <div style="color: #6b7280; margin-top: 8px;">5 questions audio</div>
+                            <p style="color: #6b7280; font-size: 0.95em;">5 questions audio</p>
                         </div>
                         <div class="skill-card">
                             <div class="skill-icon">📖</div>
                             <div class="skill-name">Compréhension écrite</div>
-                            <div style="color: #6b7280; margin-top: 8px;">5 questions lecture</div>
+                            <p style="color: #6b7280; font-size: 0.95em;">5 questions lecture</p>
                         </div>
                         <div class="skill-card">
                             <div class="skill-icon">🗣️</div>
                             <div class="skill-name">Expression orale</div>
-                            <div style="color: #6b7280; margin-top: 8px;">5 enregistrements vocaux</div>
+                            <p style="color: #6b7280; font-size: 0.95em;">5 enregistrements</p>
                         </div>
                         <div class="skill-card">
                             <div class="skill-icon">✍️</div>
                             <div class="skill-name">Expression écrite</div>
-                            <div style="color: #6b7280; margin-top: 8px;">5 rédactions courtes</div>
+                            <p style="color: #6b7280; font-size: 0.95em;">5 rédactions</p>
                         </div>
                     </div>
 
-                    <div class="warning-box" style="max-width: 600px; margin: 30px auto;">
-                        ⚠️ <strong>Important :</strong> Assurez-vous d'avoir 20 minutes sans interruption. 
-                        Autorisez l'accès au microphone quand demandé.
+                    <div class="warning-box" style="max-width: 600px; margin: 0 auto 30px;">
+                        ⚠️ <strong>Prérequis :</strong><br>
+                        • 20 minutes sans interruption<br>
+                        • Microphone fonctionnel<br>
+                        • Environnement calme
                     </div>
 
-                    <button class="btn btn-primary" onclick="beginAssessment()">
-                        Je suis prêt, commençons ! 🎯
-                    </button>
-                </div>
-
-                <div id="assessmentQuestions" class="hidden">
-                    <div class="progress-bar-container">
-                        <div class="progress-bar-fill" id="assessmentProgress"></div>
-                    </div>
-
-                    <div class="question-card" id="questionCard">
-                        <!-- Questions loaded dynamically -->
-                    </div>
-
-                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="width: 100%;" disabled>
-                        Question suivante →
+                    <button class="btn btn-primary" onclick="startAssessment()" style="font-size: 1.2em; padding: 18px 40px;">
+                        Je suis prêt ! Commençons 🎯
                     </button>
                 </div>
             </div>
 
+            <!-- Assessment Questions -->
+            <div id="assessmentScreen" class="screen">
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressBar"></div>
+                </div>
+
+                <div class="question-card" id="questionContainer">
+                    <!-- Questions loaded dynamically -->
+                </div>
+
+                <button class="btn btn-primary" id="nextButton" onclick="nextQuestion()" style="width: 100%;" disabled>
+                    Question suivante →
+                </button>
+            </div>
+
             <!-- Dashboard -->
-            <div id="dashboard" class="screen">
-                <div class="stats-row">
+            <div id="dashboardScreen" class="screen">
+                <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-number" id="userLevel">B1</div>
-                        <div class="stat-label">Niveau</div>
+                        <div class="stat-value" id="dashLevel">B1</div>
+                        <div class="stat-label">Niveau CECRL</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="completedTasks">0</div>
-                        <div class="stat-label">Tâches</div>
+                        <div class="stat-value" id="dashTasks">0</div>
+                        <div class="stat-label">Tâches complétées</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="streakDays">0</div>
-                        <div class="stat-label">Jours 🔥</div>
+                        <div class="stat-value" id="dashStreak">0</div>
+                        <div class="stat-label">Jours de suite 🔥</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="totalXP">0</div>
-                        <div class="stat-label">XP</div>
+                        <div class="stat-value" id="dashXP">0</div>
+                        <div class="stat-label">Points XP</div>
                     </div>
                 </div>
 
@@ -811,35 +988,28 @@
                     <div class="coach-avatar">👨‍🏫</div>
                     <div class="coach-content">
                         <div class="coach-title" id="coachTitle">Chargement...</div>
-                        <div class="coach-text" id="coachText">Chargement de votre programme...</div>
-                        <button class="coach-cta" onclick="startCurrentTask()">
-                            Commencer l'activité →
+                        <div class="coach-text" id="coachText">Préparation de votre programme personnalisé...</div>
+                        <button class="coach-cta" onclick="startNextExercise()">
+                            <span>Commencer l'exercice</span>
+                            <span>→</span>
                         </button>
                     </div>
                 </div>
 
-                <h3 style="color: #1e3a8a; margin-bottom: 20px;">📊 Votre progression</h3>
-                <div class="progress-overview" id="progressOverview">
+                <h3 style="color: #1e3a8a; margin-bottom: 20px; font-size: 1.5em;">📊 Vos compétences</h3>
+                <div class="skills-grid" id="skillsGrid">
                     <!-- Skills loaded dynamically -->
                 </div>
+            </div>
 
-                <div class="current-task">
-                    <div class="task-title" id="taskTitle">Activité en cours</div>
-                    <div class="task-description" id="taskDescription">Chargement...</div>
-                    <div class="task-meta">
-                        <div class="task-meta-item">
-                            <span>⏱️</span>
-                            <span><strong>Durée :</strong> <span id="taskDuration">--</span></span>
-                        </div>
-                        <div class="task-meta-item">
-                            <span>⭐</span>
-                            <span><strong>XP :</strong> <span id="taskXP">--</span></span>
-                        </div>
-                    </div>
-                    <div class="why-section">
-                        <div class="why-title">💡 Pourquoi cette activité ?</div>
-                        <div id="taskWhy">Chargement...</div>
-                    </div>
+            <!-- Exercise Screen -->
+            <div id="exerciseScreen" class="screen">
+                <button class="btn btn-secondary" onclick="backToDashboard()" style="margin-bottom: 20px;">
+                    ← Retour au tableau de bord
+                </button>
+
+                <div class="exercise-container" id="exerciseContainer">
+                    <!-- Exercise loaded dynamically -->
                 </div>
             </div>
         </div>
@@ -850,57 +1020,106 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">⚙️ Paramètres</h2>
-                <button class="close-btn" onclick="closeSettings()">&times;</button>
+                <button class="close-button" onclick="closeSettings()">&times;</button>
             </div>
 
-            <div class="setting-item">
-                <label class="setting-label">🔑 Clé API Claude</label>
+            <div class="settings-section">
+                <div class="section-title">🔑 Clé API Claude</div>
                 <input 
                     type="password" 
-                    class="api-input" 
-                    id="settingsApiKey" 
+                    class="input-field" 
+                    id="settingsClaudeKey" 
                     placeholder="sk-ant-api03-..."
                 >
-                <button class="btn btn-secondary" onclick="updateApiKey()" style="margin-top: 10px; width: 100%;">
-                    Sauvegarder
+                <button class="btn btn-secondary" onclick="saveClaudeKey()" style="width: 100%; margin-top: 10px;">
+                    Sauvegarder la clé
                 </button>
             </div>
 
-            <div class="setting-item">
-                <label class="setting-label">📊 Statistiques</label>
-                <div style="background: #f9fafb; padding: 15px; border-radius: 8px;">
-                    <div style="margin-bottom: 10px;">
-                        <strong>Niveau :</strong> <span id="statsLevel">--</span>
-                    </div>
-                    <div style="margin-bottom: 10px;">
-                        <strong>Tâches complétées :</strong> <span id="statsCompleted">--</span>
-                    </div>
-                    <div>
-                        <strong>XP Total :</strong> <span id="statsXP">--</span>
-                    </div>
+            <div class="settings-section">
+                <div class="section-title">☁️ Google Drive Synchronisation</div>
+                
+                <div class="input-group">
+                    <label class="input-label">Client ID OAuth</label>
+                    <input 
+                        type="text" 
+                        class="input-field" 
+                        id="settingsGoogleClientId" 
+                        placeholder="XXXX.apps.googleusercontent.com"
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">API Key Google</label>
+                    <input 
+                        type="text" 
+                        class="input-field" 
+                        id="settingsGoogleApiKey" 
+                        placeholder="AIzaSy..."
+                    >
+                </div>
+
+                <div class="connection-status" id="googleStatus">
+                    <strong>Statut :</strong> <span id="googleStatusText">Non configuré</span>
+                </div>
+
+                <button class="btn btn-success" id="googleConnectBtn" onclick="connectGoogleDrive()" style="width: 100%; margin-top: 10px;">
+                    Sauvegarder et se connecter
+                </button>
+                
+                <button class="btn btn-secondary" id="googleDisconnectBtn" onclick="disconnectGoogleDrive()" style="width: 100%; margin-top: 10px; display: none;">
+                    Se déconnecter
+                </button>
+            </div>
+
+            <div class="settings-section">
+                <div class="section-title">📊 Statistiques</div>
+                <div class="connection-status">
+                    <div style="margin-bottom: 10px;"><strong>Niveau :</strong> <span id="statsLevel">--</span></div>
+                    <div style="margin-bottom: 10px;"><strong>Tâches :</strong> <span id="statsCompleted">--</span></div>
+                    <div style="margin-bottom: 10px;"><strong>XP Total :</strong> <span id="statsXP">--</span></div>
+                    <div><strong>Test complété :</strong> <span id="statsAssessment">--</span></div>
                 </div>
             </div>
 
-            <div class="setting-item">
-                <label class="setting-label">🔄 Actions</label>
+            <div class="settings-section">
+                <div class="section-title">💾 Gestion des données</div>
+                <button class="btn btn-secondary" onclick="exportData()" style="width: 100%; margin-bottom: 10px;">
+                    📥 Exporter mes données (JSON)
+                </button>
+                <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()" style="width: 100%; margin-bottom: 10px;">
+                    📤 Importer des données
+                </button>
+                <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display: none;">
+            </div>
+
+            <div class="settings-section">
+                <div class="section-title">🔄 Actions</div>
                 <button class="btn btn-secondary" onclick="retakeAssessment()" style="width: 100%; margin-bottom: 10px;">
                     Refaire le test de niveau
                 </button>
-                <button class="btn btn-secondary" onclick="resetData()" style="width: 100%; background: #fee2e2; color: #dc2626;">
-                    Réinitialiser toutes les données
+                <button class="btn btn-secondary" onclick="resetAllData()" style="width: 100%; background: #fee2e2; color: #dc2626;">
+                    ⚠️ Réinitialiser toutes les données
                 </button>
             </div>
         </div>
     </div>
 
+    <script src="https://apis.google.com/js/api.js"></script>
+
     <script>
-        // Configuration
+        // ============================================
+        // CONFIGURATION & DATA STRUCTURES
+        // ============================================
+
         let config = {
-            apiKey: null,
-            apiModel: 'claude-sonnet-4-20250514'
+            claudeApiKey: null,
+            claudeModel: 'claude-sonnet-4-20250514',
+            googleClientId: null,
+            googleApiKey: null,
+            googleDriveEnabled: false
         };
 
-        // User data
         let userData = {
             level: null,
             skills: {
@@ -911,61 +1130,76 @@
             },
             weakestSkill: null,
             completedTasks: 0,
-            currentTaskIndex: 0,
             streak: 0,
             xp: 0,
             assessmentComplete: false,
-            assessmentAnswers: []
+            currentExerciseIndex: 0,
+            lastActivityDate: null
         };
 
-        // Assessment questions
+        let assessmentData = {
+            currentIndex: 0,
+            answers: [],
+            isRecording: false,
+            currentTranscript: '',
+            recognition: null
+        };
+
+        let googleAuth = null;
+        let driveFileId = null;
+        const DRIVE_FILENAME = 'english-learning-data.json';
+
+        // ============================================
+        // ASSESSMENT QUESTIONS DATABASE
+        // ============================================
+
         const assessmentQuestions = [
             // LISTENING (5 questions)
             {
                 type: 'listening',
-                audioText: 'Hello, my name is Sarah. I work as a teacher in London. I have two children.',
-                question: 'What is Sarah\'s job?',
-                options: ['Doctor', 'Teacher', 'Engineer', 'Lawyer'],
+                audio: 'Hello, my name is Sarah. I work as a teacher in London. I have been teaching English for five years.',
+                question: 'What is Sarah\'s profession?',
+                options: ['Doctor', 'Teacher', 'Engineer', 'Nurse'],
                 correct: 1,
                 difficulty: 1
             },
             {
                 type: 'listening',
-                audioText: 'The meeting has been rescheduled from Tuesday to Thursday at 3 PM because the manager is unavailable.',
-                question: 'When is the new meeting time?',
-                options: ['Tuesday at 3 PM', 'Wednesday at 3 PM', 'Thursday at 3 PM', 'Friday at 3 PM'],
+                audio: 'The meeting has been rescheduled from Tuesday to Thursday at 3 PM. Please mark your calendars accordingly.',
+                question: 'When is the new meeting?',
+                options: ['Tuesday 3 PM', 'Wednesday 3 PM', 'Thursday 3 PM', 'Friday 3 PM'],
                 correct: 2,
                 difficulty: 2
             },
             {
                 type: 'listening',
-                audioText: 'Despite the challenging economic climate, our company managed to increase profits by fifteen percent last quarter.',
-                question: 'What happened to the company\'s profits?',
-                options: ['Decreased', 'Stayed the same', 'Increased by 15%', 'Increased by 50%'],
+                audio: 'Despite the challenging economic climate, our company managed to increase profits by fifteen percent last quarter.',
+                question: 'What happened to company profits?',
+                options: ['Decreased', 'Stayed same', 'Increased 15%', 'Increased 50%'],
                 correct: 2,
-                difficulty: 3
+                difficulty: 2
             },
             {
                 type: 'listening',
-                audioText: 'I usually go to the gym three times a week, but this month I\'ve been too busy with work.',
-                question: 'Why isn\'t the person going to the gym?',
-                options: ['They are sick', 'Too busy with work', 'The gym is closed', 'They don\'t like it anymore'],
+                audio: 'I usually go to the gym three times a week, but this month I have been too busy with work to maintain my routine.',
+                question: 'Why isn\'t the speaker going to the gym?',
+                options: ['Gym closed', 'Too busy', 'Feeling sick', 'Too expensive'],
                 correct: 1,
                 difficulty: 2
             },
             {
                 type: 'listening',
-                audioText: 'The conference will address contemporary challenges in artificial intelligence, featuring speakers from diverse academic backgrounds.',
-                question: 'What is the main topic of the conference?',
-                options: ['History', 'Artificial Intelligence', 'Medicine', 'Business'],
-                correct: 1,
+                audio: 'The conference will address contemporary challenges in artificial intelligence, featuring speakers from diverse academic backgrounds.',
+                question: 'What is the conference about?',
+                options: ['History', 'Medicine', 'Artificial Intelligence', 'Literature'],
+                correct: 2,
                 difficulty: 3
             },
 
             // READING (5 questions)
             {
                 type: 'reading',
-                text: 'My favorite food is pizza. I like pizza with cheese and tomatoes. I eat pizza every Friday with my family at our favorite restaurant.',
+                passage: 'My favorite food is pizza. I like pizza with cheese and tomatoes. Every Friday, I eat pizza with my family at our favorite restaurant.',
                 question: 'When does the person eat pizza?',
                 options: ['Monday', 'Wednesday', 'Friday', 'Sunday'],
                 correct: 2,
@@ -973,7 +1207,7 @@
             },
             {
                 type: 'reading',
-                text: 'The library is open from Monday to Saturday, 9 AM to 6 PM. On Sundays, it is closed for maintenance and restocking.',
+                passage: 'The library is open from Monday to Saturday, 9 AM to 6 PM. On Sundays, it is closed for maintenance and restocking of books.',
                 question: 'What happens on Sundays?',
                 options: ['Opens at 10 AM', 'Closes at 5 PM', 'Open all day', 'Closed for maintenance'],
                 correct: 3,
@@ -981,25 +1215,25 @@
             },
             {
                 type: 'reading',
-                text: 'Remote work has become increasingly popular. While it offers flexibility and eliminates commuting, it can also lead to feelings of isolation and difficulty separating work from personal life.',
-                question: 'What is mentioned as a disadvantage of remote work?',
+                passage: 'Remote work has become increasingly popular. While it offers flexibility and eliminates commuting, it can also lead to feelings of isolation and difficulty separating work from personal life.',
+                question: 'What is a disadvantage of remote work mentioned?',
                 options: ['Higher costs', 'Longer commute', 'Feelings of isolation', 'Less flexibility'],
                 correct: 2,
                 difficulty: 2
             },
             {
                 type: 'reading',
-                text: 'Climate change poses one of the greatest challenges to humanity. Rising temperatures, extreme weather events, and sea level rise threaten ecosystems and communities worldwide.',
+                passage: 'Climate change poses one of the greatest challenges to humanity. Rising temperatures, extreme weather events, and sea level rise threaten ecosystems and communities worldwide.',
                 question: 'According to the text, what threatens ecosystems?',
-                options: ['Only rising temperatures', 'Only extreme weather', 'Climate change effects', 'Only sea level rise'],
+                options: ['Only temperature', 'Only weather', 'Climate change effects', 'Only sea levels'],
                 correct: 2,
                 difficulty: 3
             },
             {
                 type: 'reading',
-                text: 'The protagonist\'s journey from innocence to experience mirrors the novel\'s exploration of societal transformation during the industrial revolution.',
+                passage: 'The novel explores themes of identity and belonging through the protagonist\'s journey from innocence to experience, mirroring societal transformation during the industrial revolution.',
                 question: 'What does the novel explore?',
-                options: ['Modern technology', 'Societal transformation', 'Space exploration', 'Ancient history'],
+                options: ['Space travel', 'Societal transformation', 'Modern technology', 'Ancient history'],
                 correct: 1,
                 difficulty: 3
             },
@@ -1007,13 +1241,13 @@
             // SPEAKING (5 questions)
             {
                 type: 'speaking',
-                prompt: 'Introduce yourself in English. Say your name, where you\'re from, and what you do.',
+                prompt: 'Introduce yourself in English. Say your name, where you are from, and what you do.',
                 minWords: 15,
                 difficulty: 1
             },
             {
                 type: 'speaking',
-                prompt: 'Describe your daily routine. What do you do in the morning?',
+                prompt: 'Describe your daily routine. What do you usually do in the morning?',
                 minWords: 20,
                 difficulty: 2
             },
@@ -1025,13 +1259,13 @@
             },
             {
                 type: 'speaking',
-                prompt: 'Explain why learning English is important to you. Give at least two reasons.',
+                prompt: 'Explain why learning English is important for you. Give at least two reasons.',
                 minWords: 30,
                 difficulty: 2
             },
             {
                 type: 'speaking',
-                prompt: 'Discuss the advantages and disadvantages of using social media.',
+                prompt: 'Discuss the advantages and disadvantages of using social media in modern society.',
                 minWords: 40,
                 difficulty: 3
             },
@@ -1051,41 +1285,100 @@
             },
             {
                 type: 'writing',
-                prompt: 'Write an email to a friend inviting them to your birthday party. Include the date, time, and location.',
+                prompt: 'Write a friendly email inviting someone to your birthday party. Include the date, time, and location.',
                 minWords: 50,
                 difficulty: 2
             },
             {
                 type: 'writing',
-                prompt: 'Write about a memorable experience from your childhood. Describe what happened and how you felt.',
+                prompt: 'Describe a memorable experience from your childhood. What happened and how did you feel?',
                 minWords: 60,
                 difficulty: 2
             },
             {
                 type: 'writing',
-                prompt: 'Write an argumentative paragraph: Should universities offer free education? Take a position and support it with reasons.',
+                prompt: 'Write an argumentative paragraph: Should university education be free for everyone? Take a position and support it with reasons.',
                 minWords: 80,
                 difficulty: 3
             }
         ];
 
-        let currentQuestionIndex = 0;
-        let isRecording = false;
-        let recognition = null;
-        let currentTranscript = '';
+        // ============================================
+        // EXERCISE TEMPLATES
+        // ============================================
 
-        // Initialize speech recognition
-        if ('webkitSpeechRecognition' in window) {
-            recognition = new webkitSpeechRecognition();
-            recognition.lang = 'en-US';
-            recognition.continuous = true; // Keep recording
-            recognition.interimResults = true;
-        }
+        const exerciseTemplates = {
+            listening: [
+                {
+                    title: 'Conversation au café',
+                    audio: 'Good morning! Can I have a cappuccino, please? Would you like anything else? Yes, a chocolate croissant. That will be five pounds fifty.',
+                    questions: [
+                        {
+                            question: 'What does the customer order?',
+                            options: ['Cappuccino and croissant', 'Tea and cake', 'Coffee only', 'Sandwich'],
+                            correct: 0
+                        }
+                    ],
+                    xp: 50
+                },
+                {
+                    title: 'Annonce de train',
+                    audio: 'The next train to Manchester will depart from platform seven at ten fifteen. Please mind the gap between the train and the platform.',
+                    questions: [
+                        {
+                            question: 'From which platform does the train leave?',
+                            options: ['Platform 5', 'Platform 6', 'Platform 7', 'Platform 8'],
+                            correct: 2
+                        }
+                    ],
+                    xp: 50
+                }
+            ],
+            reading: [
+                {
+                    title: 'Email professionnel',
+                    text: 'Dear Team, I hope this email finds you well. I am writing to inform you that our quarterly meeting has been scheduled for next Monday at 2 PM in the main conference room. Please prepare your progress reports. Best regards, John',
+                    questions: [
+                        {
+                            question: 'When is the meeting?',
+                            options: ['This Monday', 'Next Monday', 'This Friday', 'Next Friday'],
+                            correct: 1
+                        }
+                    ],
+                    xp: 45
+                }
+            ],
+            speaking: [
+                {
+                    title: 'Présentation personnelle',
+                    prompt: 'Introduce yourself: name, age, occupation, and one interesting fact about you.',
+                    minWords: 20,
+                    xp: 60
+                }
+            ],
+            writing: [
+                {
+                    title: 'Email de demande',
+                    prompt: 'Write an email to your teacher asking for an extension on your homework deadline. Be polite and give a reason.',
+                    minWords: 50,
+                    xp: 55
+                }
+            ]
+        };
 
-        // Initialize
-        function initApp() {
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+
+        function init() {
             loadConfig();
             loadUserData();
+            initSpeechRecognition();
+            updateSyncStatus();
+
+            if (config.googleDriveEnabled && config.googleClientId) {
+                loadGoogleAPI();
+            }
 
             if (userData.assessmentComplete) {
                 showDashboard();
@@ -1093,43 +1386,135 @@
         }
 
         function loadConfig() {
-            const saved = localStorage.getItem('englishLearningConfig_v23');
+            const saved = localStorage.getItem('englishConfig_v24');
             if (saved) {
                 config = { ...config, ...JSON.parse(saved) };
             }
         }
 
         function saveConfig() {
-            localStorage.setItem('englishLearningConfig_v23', JSON.stringify(config));
+            localStorage.setItem('englishConfig_v24', JSON.stringify(config));
         }
 
         function loadUserData() {
-            const saved = localStorage.getItem('englishLearningData_v23');
+            const saved = localStorage.getItem('englishData_v24');
             if (saved) {
                 userData = { ...userData, ...JSON.parse(saved) };
+                updateStreak();
             }
         }
 
         function saveUserData() {
-            localStorage.setItem('englishLearningData_v23', JSON.stringify(userData));
+            localStorage.setItem('englishData_v24', JSON.stringify(userData));
+            if (config.googleDriveEnabled && googleAuth && googleAuth.isSignedIn.get()) {
+                syncToGoogleDrive();
+            }
         }
 
-        function startAssessment() {
-            const apiKey = document.getElementById('setupApiKey').value.trim();
-            if (apiKey && apiKey.startsWith('sk-ant-')) {
-                config.apiKey = apiKey;
-                saveConfig();
+        function updateStreak() {
+            const today = new Date().toDateString();
+            if (userData.lastActivityDate !== today) {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                if (userData.lastActivityDate === yesterday.toDateString()) {
+                    userData.streak++;
+                } else {
+                    userData.streak = 1;
+                }
+                userData.lastActivityDate = today;
+            }
+        }
+
+        function updateSyncStatus() {
+            const icon = document.getElementById('syncIcon');
+            const text = document.getElementById('syncText');
+            
+            if (config.googleDriveEnabled && googleAuth && googleAuth.isSignedIn.get()) {
+                icon.textContent = '✅';
+                text.textContent = 'Sync Google Drive';
+            } else {
+                icon.textContent = '☁️';
+                text.textContent = 'Local uniquement';
+            }
+        }
+
+        // ============================================
+        // SETUP & CONFIGURATION
+        // ============================================
+
+        function skipSetup() {
+            showScreen('assessmentIntro');
+        }
+
+        function saveSetupAndStart() {
+            const claudeKey = document.getElementById('setupClaudeKey').value.trim();
+            const googleClientId = document.getElementById('setupGoogleClientId').value.trim();
+            const googleApiKey = document.getElementById('setupGoogleApiKey').value.trim();
+
+            if (claudeKey && claudeKey.startsWith('sk-ant-')) {
+                config.claudeApiKey = claudeKey;
             }
 
-            document.getElementById('setupScreen').classList.remove('active');
-            document.getElementById('assessmentScreen').classList.add('active');
+            if (googleClientId) {
+                config.googleClientId = googleClientId;
+                config.googleApiKey = googleApiKey;
+                config.googleDriveEnabled = true;
+            }
+
+            saveConfig();
+            showScreen('assessmentIntro');
         }
 
-        function beginAssessment() {
-            document.getElementById('assessmentIntro').classList.add('hidden');
-            document.getElementById('assessmentQuestions').classList.remove('hidden');
-            currentQuestionIndex = 0;
-            userData.assessmentAnswers = [];
+        // ============================================
+        // SPEECH RECOGNITION
+        // ============================================
+
+        function initSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window) {
+                assessmentData.recognition = new webkitSpeechRecognition();
+                assessmentData.recognition.lang = 'en-US';
+                assessmentData.recognition.continuous = true;
+                assessmentData.recognition.interimResults = true;
+
+                assessmentData.recognition.onresult = (event) => {
+                    let interim = '';
+                    let final = '';
+
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        const transcript = event.results[i][0].transcript;
+                        if (event.results[i].isFinal) {
+                            final += transcript + ' ';
+                        } else {
+                            interim += transcript;
+                        }
+                    }
+
+                    assessmentData.currentTranscript += final;
+                    
+                    if (assessmentData.isRecording) {
+                        const display = (assessmentData.currentTranscript + interim).trim();
+                        const statusEl = document.getElementById('micStatus');
+                        if (statusEl) {
+                            statusEl.textContent = display || 'En attente de parole...';
+                        }
+                    }
+                };
+
+                assessmentData.recognition.onerror = (event) => {
+                    console.error('Speech recognition error:', event.error);
+                    assessmentData.isRecording = false;
+                };
+            }
+        }
+
+        // ============================================
+        // ASSESSMENT
+        // ============================================
+
+        function startAssessment() {
+            assessmentData.currentIndex = 0;
+            assessmentData.answers = [];
+            showScreen('assessmentScreen');
             loadQuestion(0);
         }
 
@@ -1140,90 +1525,109 @@
             }
 
             const question = assessmentQuestions[index];
-            const card = document.getElementById('questionCard');
-            
+            const container = document.getElementById('questionContainer');
             const progress = ((index + 1) / assessmentQuestions.length) * 100;
-            document.getElementById('assessmentProgress').style.width = `${progress}%`;
+            document.getElementById('progressBar').style.width = `${progress}%`;
 
             let html = `
                 <div class="question-header">
-                    <div class="question-type">${getTypeName(question.type)}</div>
+                    <div class="question-type">${getQuestionTypeName(question.type)}</div>
                     <div class="question-number">Question ${index + 1}/${assessmentQuestions.length}</div>
                 </div>
             `;
 
             if (question.type === 'listening') {
-                html += `
-                    <div class="audio-player">
-                        <button class="play-btn" onclick="playAudio('${question.audioText}')">▶️</button>
-                        <div>
-                            <div style="font-weight: 600;">Écoutez l'audio</div>
-                            <div style="font-size: 0.9em; color: #6b7280; margin-top: 5px;">
-                                Vous pouvez écouter plusieurs fois
-                            </div>
-                        </div>
-                    </div>
-                    <div class="question-text">${question.question}</div>
-                    <div class="options-grid">
-                        ${question.options.map((opt, idx) => `
-                            <button class="option-btn" onclick="selectOption(${idx})">${opt}</button>
-                        `).join('')}
-                    </div>
-                `;
+                html += renderListeningQuestion(question);
             } else if (question.type === 'reading') {
-                html += `
-                    <div class="reading-text">${question.text}</div>
-                    <div class="question-text">${question.question}</div>
-                    <div class="options-grid">
-                        ${question.options.map((opt, idx) => `
-                            <button class="option-btn" onclick="selectOption(${idx})">${opt}</button>
-                        `).join('')}
-                    </div>
-                `;
+                html += renderReadingQuestion(question);
             } else if (question.type === 'speaking') {
-                html += `
-                    <div class="question-text">${question.prompt}</div>
-                    <div class="voice-container">
-                        <button class="mic-btn ready" id="micBtn" onclick="toggleRecording()">🎤</button>
-                        <div class="mic-status" id="micStatus">Cliquez pour commencer à parler</div>
-                        <div class="mic-instruction">
-                            📍 Cliquez sur le micro pour <strong>COMMENCER</strong><br>
-                            📍 Parlez autant que vous voulez (pauses autorisées)<br>
-                            📍 Cliquez à nouveau pour <strong>ARRÊTER</strong>
-                        </div>
-                        <div class="transcript-box" id="transcriptBox">
-                            <strong>Votre réponse :</strong>
-                            <div class="transcript-text" id="transcriptText"></div>
-                        </div>
-                    </div>
-                `;
+                html += renderSpeakingQuestion(question);
             } else if (question.type === 'writing') {
-                html += `
-                    <div class="question-text">${question.prompt}</div>
-                    <textarea 
-                        class="text-input" 
-                        id="writingInput" 
-                        placeholder="Écrivez votre réponse ici en anglais..."
-                        oninput="checkWritingInput(${question.minWords})"
-                    ></textarea>
-                    <div class="word-count">
-                        <span id="wordCount">0</span> / ${question.minWords} mots minimum
-                    </div>
-                `;
+                html += renderWritingQuestion(question);
             }
 
-            card.innerHTML = html;
-            document.getElementById('nextBtn').disabled = true;
+            container.innerHTML = html;
+            document.getElementById('nextButton').disabled = true;
         }
 
-        function getTypeName(type) {
+        function getQuestionTypeName(type) {
             const names = {
-                'listening': '👂 Compréhension orale',
-                'reading': '📖 Compréhension écrite',
-                'speaking': '🗣️ Expression orale',
-                'writing': '✍️ Expression écrite'
+                listening: '👂 Compréhension orale',
+                reading: '📖 Compréhension écrite',
+                speaking: '🗣️ Expression orale',
+                writing: '✍️ Expression écrite'
             };
-            return names[type];
+            return names[type] || type;
+        }
+
+        function renderListeningQuestion(question) {
+            return `
+                <div class="audio-container">
+                    <div class="audio-controls">
+                        <button class="play-button" onclick="playAudio('${question.audio.replace(/'/g, "\\'")}')">
+                            ▶️
+                        </button>
+                        <div class="audio-info">
+                            <div class="audio-title">Écoutez l'audio</div>
+                            <div class="audio-instruction">Vous pouvez écouter plusieurs fois</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="question-text">${question.question}</div>
+                <div class="options-container">
+                    ${question.options.map((opt, idx) => `
+                        <button class="option-button" onclick="selectOption(${idx})">${opt}</button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderReadingQuestion(question) {
+            return `
+                <div class="reading-passage">${question.passage}</div>
+                <div class="question-text">${question.question}</div>
+                <div class="options-container">
+                    ${question.options.map((opt, idx) => `
+                        <button class="option-button" onclick="selectOption(${idx})">${opt}</button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderSpeakingQuestion(question) {
+            return `
+                <div class="question-text">${question.prompt}</div>
+                <div class="voice-container">
+                    <button class="mic-button ready" id="micButton" onclick="toggleRecording()">
+                        🎤
+                    </button>
+                    <div class="mic-status" id="micStatus">Cliquez pour commencer</div>
+                    <div class="mic-instructions">
+                        📍 Cliquez sur 🎤 pour <strong>COMMENCER</strong><br>
+                        📍 Parlez autant que vous voulez (pauses OK)<br>
+                        📍 Cliquez sur ⏹️ pour <strong>ARRÊTER</strong>
+                    </div>
+                    <div class="transcript-display" id="transcriptDisplay">
+                        <div class="transcript-label">Votre réponse :</div>
+                        <div class="transcript-text" id="transcriptText"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderWritingQuestion(question) {
+            return `
+                <div class="question-text">${question.prompt}</div>
+                <textarea 
+                    class="writing-textarea" 
+                    id="writingTextarea" 
+                    placeholder="Écrivez votre réponse en anglais..."
+                    oninput="checkWritingLength(${question.minWords})"
+                ></textarea>
+                <div class="word-counter" id="wordCounter">
+                    0 / ${question.minWords} mots minimum
+                </div>
+            `;
         }
 
         function playAudio(text) {
@@ -1234,7 +1638,7 @@
         }
 
         function selectOption(index) {
-            const buttons = document.querySelectorAll('.option-btn');
+            const buttons = document.querySelectorAll('.option-button');
             buttons.forEach((btn, idx) => {
                 btn.classList.remove('selected');
                 if (idx === index) {
@@ -1242,176 +1646,162 @@
                 }
             });
 
-            const question = assessmentQuestions[currentQuestionIndex];
+            const question = assessmentQuestions[assessmentData.currentIndex];
             const isCorrect = index === question.correct;
-            
-            userData.assessmentAnswers.push({
+            const score = isCorrect ? 100 : 0;
+
+            assessmentData.answers.push({
                 type: question.type,
                 difficulty: question.difficulty,
-                correct: isCorrect,
-                score: isCorrect ? 100 : 0
+                score: score,
+                correct: isCorrect
             });
 
-            document.getElementById('nextBtn').disabled = false;
+            document.getElementById('nextButton').disabled = false;
         }
 
         function toggleRecording() {
-            if (!recognition) {
-                alert('La reconnaissance vocale n\'est pas supportée. Utilisez Chrome ou Edge.');
+            if (!assessmentData.recognition) {
+                alert('❌ La reconnaissance vocale n\'est pas supportée.\nUtilisez Chrome ou Edge.');
                 return;
             }
 
-            const micBtn = document.getElementById('micBtn');
+            const micBtn = document.getElementById('micButton');
             const status = document.getElementById('micStatus');
-            const transcriptBox = document.getElementById('transcriptBox');
+            const transcriptDisplay = document.getElementById('transcriptDisplay');
 
-            if (!isRecording) {
-                // START recording
-                currentTranscript = '';
-                recognition.start();
-                isRecording = true;
+            if (!assessmentData.isRecording) {
+                // START
+                assessmentData.currentTranscript = '';
+                assessmentData.recognition.start();
+                assessmentData.isRecording = true;
                 micBtn.classList.remove('ready');
                 micBtn.classList.add('recording');
                 micBtn.textContent = '⏹️';
-                status.textContent = '🔴 ENREGISTREMENT EN COURS... Cliquez pour arrêter';
-                transcriptBox.classList.remove('show');
+                status.textContent = '🔴 ENREGISTREMENT... Cliquez pour arrêter';
+                transcriptDisplay.classList.remove('visible');
             } else {
-                // STOP recording
-                recognition.stop();
-                isRecording = false;
+                // STOP
+                assessmentData.recognition.stop();
+                assessmentData.isRecording = false;
                 micBtn.classList.remove('recording');
                 micBtn.classList.add('ready');
                 micBtn.textContent = '🎤';
                 status.textContent = '✅ Enregistrement terminé';
                 
-                // Show transcript
-                document.getElementById('transcriptText').textContent = currentTranscript || '(Aucun texte capté)';
-                transcriptBox.classList.add('show');
+                document.getElementById('transcriptText').textContent = 
+                    assessmentData.currentTranscript.trim() || '(Aucun texte capté)';
+                transcriptDisplay.classList.add('visible');
 
-                // Evaluate
-                const question = assessmentQuestions[currentQuestionIndex];
-                const wordCount = currentTranscript.split(/\s+/).filter(w => w.length > 0).length;
-                const score = evaluateSpeaking(currentTranscript, question.minWords);
+                const question = assessmentQuestions[assessmentData.currentIndex];
+                const score = evaluateSpeaking(assessmentData.currentTranscript, question.minWords);
 
-                userData.assessmentAnswers.push({
+                assessmentData.answers.push({
                     type: 'speaking',
                     difficulty: question.difficulty,
-                    text: currentTranscript,
                     score: score,
-                    wordCount: wordCount
+                    text: assessmentData.currentTranscript.trim(),
+                    wordCount: countWords(assessmentData.currentTranscript)
                 });
 
-                document.getElementById('nextBtn').disabled = false;
+                document.getElementById('nextButton').disabled = false;
             }
-
-            recognition.onresult = (event) => {
-                let interimTranscript = '';
-                let finalTranscript = '';
-
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    const transcript = event.results[i][0].transcript;
-                    if (event.results[i].isFinal) {
-                        finalTranscript += transcript + ' ';
-                    } else {
-                        interimTranscript += transcript;
-                    }
-                }
-
-                currentTranscript += finalTranscript;
-                
-                // Show real-time transcript
-                if (isRecording) {
-                    const display = currentTranscript + interimTranscript;
-                    document.getElementById('micStatus').textContent = `🔴 "${display}"`;
-                }
-            };
-
-            recognition.onerror = (event) => {
-                console.error('Speech recognition error:', event.error);
-                isRecording = false;
-                micBtn.classList.remove('recording');
-                micBtn.classList.add('ready');
-                micBtn.textContent = '🎤';
-                status.textContent = '❌ Erreur. Réessayez.';
-            };
         }
 
-        function evaluateSpeaking(text, minWords) {
-            const words = text.trim().split(/\s+/).filter(w => w.length > 0);
-            const wordCount = words.length;
+        function checkWritingLength(minWords) {
+            const textarea = document.getElementById('writingTextarea');
+            const counter = document.getElementById('wordCounter');
+            const text = textarea.value;
+            const wordCount = countWords(text);
 
-            if (wordCount === 0) return 0;
-            if (wordCount < minWords * 0.5) return 20;
-            if (wordCount < minWords) return 50;
-            if (wordCount >= minWords) return 80;
-        }
-
-        function checkWritingInput(minWords) {
-            const input = document.getElementById('writingInput').value;
-            const words = input.trim().split(/\s+/).filter(w => w.length > 0);
-            const wordCount = words.length;
-
-            document.getElementById('wordCount').textContent = wordCount;
+            counter.textContent = `${wordCount} / ${minWords} mots minimum`;
 
             if (wordCount >= minWords) {
-                const question = assessmentQuestions[currentQuestionIndex];
-                const score = evaluateWriting(input, minWords);
+                counter.classList.add('complete');
+                
+                const question = assessmentQuestions[assessmentData.currentIndex];
+                const score = evaluateWriting(text, minWords);
 
                 // Update or add answer
-                const lastAnswer = userData.assessmentAnswers[userData.assessmentAnswers.length - 1];
+                const lastAnswer = assessmentData.answers[assessmentData.answers.length - 1];
                 if (lastAnswer && lastAnswer.type === 'writing') {
-                    lastAnswer.text = input;
                     lastAnswer.score = score;
+                    lastAnswer.text = text;
                     lastAnswer.wordCount = wordCount;
                 } else {
-                    userData.assessmentAnswers.push({
+                    assessmentData.answers.push({
                         type: 'writing',
                         difficulty: question.difficulty,
-                        text: input,
                         score: score,
+                        text: text,
                         wordCount: wordCount
                     });
                 }
 
-                document.getElementById('nextBtn').disabled = false;
+                document.getElementById('nextButton').disabled = false;
             } else {
-                document.getElementById('nextBtn').disabled = true;
+                counter.classList.remove('complete');
+                document.getElementById('nextButton').disabled = true;
             }
         }
 
-        function evaluateWriting(text, minWords) {
-            const words = text.trim().split(/\s+/).filter(w => w.length > 0);
-            const wordCount = words.length;
-            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+        function countWords(text) {
+            return text.trim().split(/\s+/).filter(w => w.length > 0).length;
+        }
 
+        function evaluateSpeaking(text, minWords) {
+            const wordCount = countWords(text);
+            if (wordCount === 0) return 0;
+            if (wordCount < minWords * 0.4) return 20;
+            if (wordCount < minWords * 0.7) return 45;
+            if (wordCount < minWords) return 65;
+            return 85;
+        }
+
+        function evaluateWriting(text, minWords) {
+            const wordCount = countWords(text);
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            
             let score = 0;
 
-            // Length
-            if (wordCount >= minWords) score += 30;
-            else score += (wordCount / minWords) * 30;
+            // Length score (30%)
+            if (wordCount >= minWords) {
+                score += 30;
+            } else {
+                score += (wordCount / minWords) * 30;
+            }
 
-            // Sentence structure
-            if (sentences.length >= 3) score += 20;
+            // Sentence structure (25%)
+            if (sentences.length >= 3) {
+                score += 25;
+            } else {
+                score += (sentences.length / 3) * 25;
+            }
 
-            // Capitalization
+            // Capitalization (20%)
             const properCaps = sentences.filter(s => /^[A-Z]/.test(s.trim())).length;
-            score += (properCaps / sentences.length) * 20;
+            if (sentences.length > 0) {
+                score += (properCaps / sentences.length) * 20;
+            }
 
-            // Vocabulary diversity
-            const uniqueWords = new Set(words.map(w => w.toLowerCase()));
-            const diversity = uniqueWords.size / words.length;
-            score += diversity * 30;
+            // Vocabulary diversity (25%)
+            const words = text.toLowerCase().split(/\s+/).filter(w => w.length > 0);
+            const uniqueWords = new Set(words);
+            if (words.length > 0) {
+                const diversity = uniqueWords.size / words.length;
+                score += diversity * 25;
+            }
 
             return Math.min(100, Math.round(score));
         }
 
         function nextQuestion() {
-            currentQuestionIndex++;
-            loadQuestion(currentQuestionIndex);
+            assessmentData.currentIndex++;
+            loadQuestion(assessmentData.currentIndex);
         }
 
         function finishAssessment() {
-            // Calculate scores per skill
+            // Calculate skill scores
             const skillScores = {
                 listening: [],
                 reading: [],
@@ -1419,7 +1809,7 @@
                 writing: []
             };
 
-            userData.assessmentAnswers.forEach(answer => {
+            assessmentData.answers.forEach(answer => {
                 skillScores[answer.type].push(answer.score);
             });
 
@@ -1428,16 +1818,18 @@
                 const scores = skillScores[skill];
                 if (scores.length > 0) {
                     const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-                    // Apply penalty for consistency
+                    
+                    // Apply consistency penalty
                     const variance = scores.map(s => Math.abs(s - avg)).reduce((a, b) => a + b, 0) / scores.length;
-                    const penalty = variance > 20 ? 5 : 0;
+                    const penalty = variance > 20 ? 8 : variance > 15 ? 5 : 0;
+                    
                     userData.skills[skill] = Math.max(0, Math.round(avg - penalty));
                 }
             });
 
-            // Determine level (strict)
-            const overallScore = Object.values(userData.skills).reduce((a, b) => a + b, 0) / 4;
-            userData.level = determineLevel(overallScore);
+            // Determine level (STRICT)
+            const overall = Object.values(userData.skills).reduce((a, b) => a + b, 0) / 4;
+            userData.level = determineLevel(overall);
 
             // Find weakest skill
             userData.weakestSkill = Object.keys(userData.skills).reduce((a, b) => 
@@ -1446,55 +1838,68 @@
 
             userData.assessmentComplete = true;
             saveUserData();
-
             showDashboard();
         }
 
         function determineLevel(score) {
-            // Strict evaluation
-            if (score < 30) return 'A1';
-            if (score < 45) return 'A2';
-            if (score < 60) return 'B1';
-            if (score < 75) return 'B2';
-            if (score < 90) return 'C1';
+            // Very strict evaluation
+            if (score < 25) return 'A1';
+            if (score < 40) return 'A2';
+            if (score < 55) return 'B1';
+            if (score < 70) return 'B2';
+            if (score < 85) return 'C1';
             return 'C2';
         }
 
+        // ============================================
+        // DASHBOARD
+        // ============================================
+
         function showDashboard() {
-            document.getElementById('assessmentScreen').classList.remove('active');
-            document.getElementById('dashboard').classList.add('active');
-            updateDashboard();
+            showScreen('dashboardScreen');
+            updateDashboardStats();
+            updateCoachMessage();
+            updateSkillsDisplay();
         }
 
-        function updateDashboard() {
-            document.getElementById('userLevel').textContent = userData.level;
-            document.getElementById('completedTasks').textContent = userData.completedTasks;
-            document.getElementById('streakDays').textContent = userData.streak;
-            document.getElementById('totalXP').textContent = userData.xp;
+        function updateDashboardStats() {
+            document.getElementById('dashLevel').textContent = userData.level || '--';
+            document.getElementById('dashTasks').textContent = userData.completedTasks;
+            document.getElementById('dashStreak').textContent = userData.streak;
+            document.getElementById('dashXP').textContent = userData.xp;
+        }
 
-            // Coach message
-            const skillName = {
+        function updateCoachMessage() {
+            const skillNames = {
                 listening: 'compréhension orale',
                 reading: 'compréhension écrite',
                 speaking: 'expression orale',
                 writing: 'expression écrite'
-            }[userData.weakestSkill];
+            };
 
-            document.getElementById('coachTitle').textContent = `Bonjour ! Votre niveau est ${userData.level}`;
-            document.getElementById('coachText').textContent = `J'ai analysé vos résultats. Votre point à améliorer est la ${skillName} (${userData.skills[userData.weakestSkill]}%). Commençons par renforcer cette compétence avec des exercices ciblés.`;
+            const weakSkillName = skillNames[userData.weakestSkill];
+            const weakScore = userData.skills[userData.weakestSkill];
 
-            // Progress overview
-            const container = document.getElementById('progressOverview');
+            document.getElementById('coachTitle').textContent = 
+                `Bravo ! Votre niveau est ${userData.level}`;
+            
+            document.getElementById('coachText').textContent = 
+                `Votre point à améliorer est la ${weakSkillName} (${weakScore}%). Je vous ai préparé des exercices ciblés pour progresser rapidement. Commençons !`;
+        }
+
+        function updateSkillsDisplay() {
+            const container = document.getElementById('skillsGrid');
             const skillInfo = {
-                listening: { icon: '👂', name: 'Écoute' },
-                reading: { icon: '📖', name: 'Lecture' },
-                speaking: { icon: '🗣️', name: 'Oral' },
-                writing: { icon: '✍️', name: 'Écrit' }
+                listening: { icon: '👂', name: 'Compréhension orale' },
+                reading: { icon: '📖', name: 'Compréhension écrite' },
+                speaking: { icon: '🗣️', name: 'Expression orale' },
+                writing: { icon: '✍️', name: 'Expression écrite' }
             };
 
             container.innerHTML = Object.keys(userData.skills).map(skill => {
                 const score = userData.skills[skill];
-                const status = score < 50 ? 'weak' : score < 75 ? 'medium' : 'strong';
+                const status = score < 50 ? 'weak' : score < 70 ? 'medium' : 'strong';
+                const statusText = score < 50 ? 'À améliorer' : score < 70 ? 'Correct' : 'Bon niveau';
                 const isPriority = skill === userData.weakestSkill;
 
                 return `
@@ -1503,75 +1908,559 @@
                         <div class="skill-icon">${skillInfo[skill].icon}</div>
                         <div class="skill-name">${skillInfo[skill].name}</div>
                         <div class="skill-score">${score}%</div>
+                        <div class="skill-status">${statusText}</div>
                     </div>
                 `;
             }).join('');
-
-            // Current task
-            document.getElementById('taskTitle').textContent = `Améliorer votre ${skillName}`;
-            document.getElementById('taskDescription').textContent = 'Exercice interactif adapté à votre niveau';
-            document.getElementById('taskDuration').textContent = '15 minutes';
-            document.getElementById('taskXP').textContent = '+60 XP';
-            document.getElementById('taskWhy').textContent = `C'est votre compétence prioritaire. En vous concentrant dessus maintenant, vous construisez une base solide.`;
         }
 
-        function startCurrentTask() {
-            alert('🎯 Fonctionnalité en développement\n\nLes exercices interactifs seront bientôt disponibles !');
+        // ============================================
+        // EXERCISES
+        // ============================================
+
+        function startNextExercise() {
+            const weakSkill = userData.weakestSkill;
+            const templates = exerciseTemplates[weakSkill];
             
-            // Simulate completion
-            userData.completedTasks++;
-            userData.xp += 60;
-            userData.skills[userData.weakestSkill] = Math.min(100, userData.skills[userData.weakestSkill] + 3);
-            saveUserData();
-            updateDashboard();
+            if (!templates || templates.length === 0) {
+                alert('Exercices en cours de développement pour cette compétence.');
+                return;
+            }
+
+            const exerciseIndex = userData.currentExerciseIndex % templates.length;
+            const exercise = templates[exerciseIndex];
+
+            showScreen('exerciseScreen');
+            loadExercise(weakSkill, exercise);
         }
+
+        function loadExercise(type, exercise) {
+            const container = document.getElementById('exerciseContainer');
+            
+            let html = `
+                <div class="exercise-header">
+                    <div class="exercise-title">${exercise.title}</div>
+                    <div class="exercise-meta">
+                        <span>⭐ +${exercise.xp} XP</span>
+                        <span>🎯 ${getQuestionTypeName(type)}</span>
+                    </div>
+                </div>
+                <div class="exercise-content">
+            `;
+
+            if (type === 'listening') {
+                html += `
+                    <div class="audio-container">
+                        <div class="audio-controls">
+                            <button class="play-button" onclick="playAudio('${exercise.audio.replace(/'/g, "\\'")}')">▶️</button>
+                            <div class="audio-info">
+                                <div class="audio-title">Écoutez l'audio</div>
+                                <div class="audio-instruction">Puis répondez aux questions</div>
+                            </div>
+                        </div>
+                    </div>
+                    ${exercise.questions.map((q, idx) => `
+                        <div style="margin-top: 25px;">
+                            <div class="question-text">${q.question}</div>
+                            <div class="options-container">
+                                ${q.options.map((opt, optIdx) => `
+                                    <button class="option-button" onclick="checkExerciseAnswer(${idx}, ${optIdx}, ${q.correct})">${opt}</button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            } else if (type === 'reading') {
+                html += `
+                    <div class="reading-passage">${exercise.text}</div>
+                    ${exercise.questions.map((q, idx) => `
+                        <div style="margin-top: 25px;">
+                            <div class="question-text">${q.question}</div>
+                            <div class="options-container">
+                                ${q.options.map((opt, optIdx) => `
+                                    <button class="option-button" onclick="checkExerciseAnswer(${idx}, ${optIdx}, ${q.correct})">${opt}</button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            } else if (type === 'speaking') {
+                html += `
+                    <div class="question-text">${exercise.prompt}</div>
+                    <div class="voice-container">
+                        <button class="mic-button ready" id="exerciseMicBtn" onclick="toggleExerciseRecording()">🎤</button>
+                        <div class="mic-status" id="exerciseMicStatus">Cliquez pour commencer</div>
+                        <div class="mic-instructions">
+                            📍 Parlez au moins ${exercise.minWords} mots<br>
+                            📍 Contrôlez l'enregistrement manuellement
+                        </div>
+                        <div class="transcript-display" id="exerciseTranscript">
+                            <div class="transcript-label">Votre réponse :</div>
+                            <div class="transcript-text" id="exerciseTranscriptText"></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="exerciseSubmitBtn" onclick="submitSpeakingExercise(${exercise.minWords}, ${exercise.xp})" style="width: 100%; margin-top: 20px;" disabled>
+                        Valider ma réponse
+                    </button>
+                `;
+            } else if (type === 'writing') {
+                html += `
+                    <div class="question-text">${exercise.prompt}</div>
+                    <textarea 
+                        class="writing-textarea" 
+                        id="exerciseWritingArea" 
+                        placeholder="Écrivez votre réponse en anglais..."
+                        oninput="checkExerciseWriting(${exercise.minWords})"
+                    ></textarea>
+                    <div class="word-counter" id="exerciseWordCounter">
+                        0 / ${exercise.minWords} mots minimum
+                    </div>
+                    <button class="btn btn-primary" id="exerciseSubmitBtn" onclick="submitWritingExercise(${exercise.xp})" style="width: 100%; margin-top: 20px;" disabled>
+                        Valider ma réponse
+                    </button>
+                `;
+            }
+
+            html += '</div><div class="feedback-box" id="exerciseFeedback"></div>';
+            container.innerHTML = html;
+        }
+
+        function checkExerciseAnswer(questionIdx, selectedIdx, correctIdx) {
+            const buttons = document.querySelectorAll('.option-button');
+            const startIdx = questionIdx * 4;
+            
+            for (let i = 0; i < 4; i++) {
+                const btn = buttons[startIdx + i];
+                btn.disabled = true;
+                if (i === correctIdx) {
+                    btn.style.borderColor = '#10b981';
+                    btn.style.background = '#d1fae5';
+                }
+                if (i === selectedIdx && i !== correctIdx) {
+                    btn.style.borderColor = '#ef4444';
+                    btn.style.background = '#fee2e2';
+                }
+            }
+
+            const feedback = document.getElementById('exerciseFeedback');
+            const isCorrect = selectedIdx === correctIdx;
+            
+            if (isCorrect) {
+                feedback.innerHTML = `
+                    <div class="feedback-title">✅ Bonne réponse !</div>
+                    <div class="feedback-text">Excellent travail ! Continuez comme ça.</div>
+                `;
+                feedback.classList.add('visible');
+                
+                setTimeout(() => {
+                    completeExercise();
+                }, 2000);
+            } else {
+                feedback.innerHTML = `
+                    <div class="feedback-title">❌ Pas tout à fait</div>
+                    <div class="feedback-text">La bonne réponse était en vert. Réessayez la prochaine fois !</div>
+                `;
+                feedback.style.background = '#fef2f2';
+                feedback.style.borderColor = '#ef4444';
+                feedback.classList.add('visible');
+                
+                setTimeout(() => {
+                    completeExercise();
+                }, 3000);
+            }
+        }
+
+        let exerciseRecording = false;
+        let exerciseTranscript = '';
+
+        function toggleExerciseRecording() {
+            if (!assessmentData.recognition) {
+                alert('Reconnaissance vocale non supportée');
+                return;
+            }
+
+            const btn = document.getElementById('exerciseMicBtn');
+            const status = document.getElementById('exerciseMicStatus');
+            const display = document.getElementById('exerciseTranscript');
+
+            if (!exerciseRecording) {
+                exerciseTranscript = '';
+                assessmentData.recognition.start();
+                exerciseRecording = true;
+                btn.classList.remove('ready');
+                btn.classList.add('recording');
+                btn.textContent = '⏹️';
+                status.textContent = '🔴 ENREGISTREMENT...';
+                display.classList.remove('visible');
+                
+                assessmentData.recognition.onresult = (event) => {
+                    let final = '';
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        if (event.results[i].isFinal) {
+                            final += event.results[i][0].transcript + ' ';
+                        }
+                    }
+                    exerciseTranscript += final;
+                };
+            } else {
+                assessmentData.recognition.stop();
+                exerciseRecording = false;
+                btn.classList.remove('recording');
+                btn.classList.add('ready');
+                btn.textContent = '🎤';
+                status.textContent = '✅ Enregistré';
+                
+                document.getElementById('exerciseTranscriptText').textContent = 
+                    exerciseTranscript.trim() || '(Aucun texte)';
+                display.classList.add('visible');
+                
+                document.getElementById('exerciseSubmitBtn').disabled = false;
+            }
+        }
+
+        function submitSpeakingExercise(minWords, xp) {
+            const wordCount = countWords(exerciseTranscript);
+            const feedback = document.getElementById('exerciseFeedback');
+            
+            if (wordCount >= minWords) {
+                feedback.innerHTML = `
+                    <div class="feedback-title">✅ Excellent !</div>
+                    <div class="feedback-text">Vous avez parlé ${wordCount} mots. +${xp} XP</div>
+                `;
+            } else {
+                feedback.innerHTML = `
+                    <div class="feedback-title">⚠️ Pas assez de mots</div>
+                    <div class="feedback-text">Vous avez dit ${wordCount} mots, minimum ${minWords}. +${Math.round(xp/2)} XP</div>
+                `;
+                xp = Math.round(xp / 2);
+            }
+            
+            feedback.classList.add('visible');
+            userData.xp += xp;
+            
+            setTimeout(completeExercise, 2000);
+        }
+
+        function checkExerciseWriting(minWords) {
+            const textarea = document.getElementById('exerciseWritingArea');
+            const counter = document.getElementById('exerciseWordCounter');
+            const wordCount = countWords(textarea.value);
+            
+            counter.textContent = `${wordCount} / ${minWords} mots minimum`;
+            
+            if (wordCount >= minWords) {
+                counter.classList.add('complete');
+                document.getElementById('exerciseSubmitBtn').disabled = false;
+            } else {
+                counter.classList.remove('complete');
+                document.getElementById('exerciseSubmitBtn').disabled = true;
+            }
+        }
+
+        function submitWritingExercise(xp) {
+            const text = document.getElementById('exerciseWritingArea').value;
+            const feedback = document.getElementById('exerciseFeedback');
+            
+            feedback.innerHTML = `
+                <div class="feedback-title">✅ Soumis !</div>
+                <div class="feedback-text">Votre texte a été enregistré. +${xp} XP</div>
+            `;
+            feedback.classList.add('visible');
+            
+            userData.xp += xp;
+            setTimeout(completeExercise, 2000);
+        }
+
+        function completeExercise() {
+            userData.completedTasks++;
+            userData.currentExerciseIndex++;
+            userData.skills[userData.weakestSkill] = Math.min(100, userData.skills[userData.weakestSkill] + 2);
+            saveUserData();
+            backToDashboard();
+        }
+
+        function backToDashboard() {
+            showDashboard();
+        }
+
+        // ============================================
+        // GOOGLE DRIVE SYNC
+        // ============================================
+
+        function loadGoogleAPI() {
+            gapi.load('client:auth2', initGoogleClient);
+        }
+
+        function initGoogleClient() {
+            gapi.client.init({
+                apiKey: config.googleApiKey,
+                clientId: config.googleClientId,
+                discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+                scope: 'https://www.googleapis.com/auth/drive.file'
+            }).then(() => {
+                googleAuth = gapi.auth2.getAuthInstance();
+                if (googleAuth.isSignedIn.get()) {
+                    updateSyncStatus();
+                    syncFromGoogleDrive();
+                }
+            }).catch(err => {
+                console.error('Google API init error:', err);
+            });
+        }
+
+        function connectGoogleDrive() {
+            const clientId = document.getElementById('settingsGoogleClientId').value.trim();
+            const apiKey = document.getElementById('settingsGoogleApiKey').value.trim();
+
+            if (!clientId || !apiKey) {
+                alert('❌ Client ID et API Key requis');
+                return;
+            }
+
+            config.googleClientId = clientId;
+            config.googleApiKey = apiKey;
+            config.googleDriveEnabled = true;
+            saveConfig();
+
+            loadGoogleAPI();
+
+            setTimeout(() => {
+                if (googleAuth) {
+                    googleAuth.signIn().then(() => {
+                        updateSyncStatus();
+                        document.getElementById('googleStatusText').textContent = 'Connecté';
+                        document.getElementById('googleConnectBtn').style.display = 'none';
+                        document.getElementById('googleDisconnectBtn').style.display = 'block';
+                        alert('✅ Connecté à Google Drive');
+                    }).catch(err => {
+                        alert('❌ Erreur de connexion: ' + err);
+                    });
+                }
+            }, 1000);
+        }
+
+        function disconnectGoogleDrive() {
+            if (googleAuth) {
+                googleAuth.signOut();
+                config.googleDriveEnabled = false;
+                saveConfig();
+                updateSyncStatus();
+                document.getElementById('googleStatusText').textContent = 'Déconnecté';
+                document.getElementById('googleConnectBtn').style.display = 'block';
+                document.getElementById('googleDisconnectBtn').style.display = 'none';
+                alert('✅ Déconnecté');
+            }
+        }
+
+        async function syncToGoogleDrive() {
+            if (!googleAuth || !googleAuth.isSignedIn.get()) return;
+
+            try {
+                const dataToSave = {
+                    userData: userData,
+                    timestamp: new Date().toISOString()
+                };
+
+                const content = JSON.stringify(dataToSave, null, 2);
+                const file = new Blob([content], { type: 'application/json' });
+
+                if (driveFileId) {
+                    await updateDriveFile(driveFileId, file);
+                } else {
+                    driveFileId = await createDriveFile(file);
+                }
+            } catch (err) {
+                console.error('Sync error:', err);
+            }
+        }
+
+        async function syncFromGoogleDrive() {
+            if (!googleAuth || !googleAuth.isSignedIn.get()) return;
+
+            try {
+                const fileId = await findDriveFile();
+                if (fileId) {
+                    driveFileId = fileId;
+                    const content = await getDriveFileContent(fileId);
+                    if (content && content.userData) {
+                        userData = { ...userData, ...content.userData };
+                        saveUserData();
+                        if (userData.assessmentComplete) {
+                            showDashboard();
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error('Sync from Drive error:', err);
+            }
+        }
+
+        async function findDriveFile() {
+            const response = await gapi.client.drive.files.list({
+                q: `name='${DRIVE_FILENAME}' and trashed=false`,
+                spaces: 'drive',
+                fields: 'files(id, name)'
+            });
+            const files = response.result.files;
+            return files.length > 0 ? files[0].id : null;
+        }
+
+        async function createDriveFile(file) {
+            const metadata = {
+                name: DRIVE_FILENAME,
+                mimeType: 'application/json'
+            };
+
+            const form = new FormData();
+            form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+            form.append('file', file);
+
+            const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+                method: 'POST',
+                headers: new Headers({ 'Authorization': 'Bearer ' + gapi.auth.getToken().access_token }),
+                body: form
+            });
+
+            const result = await response.json();
+            return result.id;
+        }
+
+        async function updateDriveFile(fileId, file) {
+            await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
+                method: 'PATCH',
+                headers: new Headers({ 'Authorization': 'Bearer ' + gapi.auth.getToken().access_token }),
+                body: file
+            });
+        }
+
+        async function getDriveFileContent(fileId) {
+            const response = await gapi.client.drive.files.get({
+                fileId: fileId,
+                alt: 'media'
+            });
+            return response.result;
+        }
+
+        // ============================================
+        // SETTINGS
+        // ============================================
 
         function openSettings() {
             document.getElementById('settingsModal').classList.add('active');
-            document.getElementById('settingsApiKey').value = config.apiKey || '';
+            
+            document.getElementById('settingsClaudeKey').value = config.claudeApiKey || '';
+            document.getElementById('settingsGoogleClientId').value = config.googleClientId || '';
+            document.getElementById('settingsGoogleApiKey').value = config.googleApiKey || '';
+            
             document.getElementById('statsLevel').textContent = userData.level || '--';
             document.getElementById('statsCompleted').textContent = userData.completedTasks;
             document.getElementById('statsXP').textContent = userData.xp;
+            document.getElementById('statsAssessment').textContent = userData.assessmentComplete ? 'Oui' : 'Non';
+
+            if (config.googleDriveEnabled && googleAuth && googleAuth.isSignedIn.get()) {
+                document.getElementById('googleStatusText').textContent = 'Connecté';
+                document.getElementById('googleConnectBtn').style.display = 'none';
+                document.getElementById('googleDisconnectBtn').style.display = 'block';
+            } else {
+                document.getElementById('googleStatusText').textContent = 'Non connecté';
+                document.getElementById('googleConnectBtn').style.display = 'block';
+                document.getElementById('googleDisconnectBtn').style.display = 'none';
+            }
         }
 
         function closeSettings() {
             document.getElementById('settingsModal').classList.remove('active');
         }
 
-        function updateApiKey() {
-            const key = document.getElementById('settingsApiKey').value.trim();
+        function saveClaudeKey() {
+            const key = document.getElementById('settingsClaudeKey').value.trim();
             if (key && key.startsWith('sk-ant-')) {
-                config.apiKey = key;
+                config.claudeApiKey = key;
                 saveConfig();
-                alert('✅ Clé API sauvegardée !');
+                alert('✅ Clé API Claude sauvegardée');
             } else if (key) {
-                alert('❌ Clé API invalide (doit commencer par sk-ant-)');
+                alert('❌ Clé invalide (doit commencer par sk-ant-)');
+            } else {
+                config.claudeApiKey = null;
+                saveConfig();
+                alert('✅ Clé API supprimée');
             }
         }
 
+        function exportData() {
+            const data = {
+                config: config,
+                userData: userData,
+                exportDate: new Date().toISOString()
+            };
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `english-learning-backup-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.config) {
+                        config = { ...config, ...data.config };
+                        saveConfig();
+                    }
+                    if (data.userData) {
+                        userData = { ...userData, ...data.userData };
+                        saveUserData();
+                    }
+                    alert('✅ Données importées avec succès');
+                    location.reload();
+                } catch (err) {
+                    alert('❌ Erreur lors de l\'importation: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
         function retakeAssessment() {
-            if (confirm('Refaire le test de niveau ? Vos résultats actuels seront remplacés.')) {
+            if (confirm('Refaire le test de niveau ?\n\nVos scores actuels seront remplacés.')) {
                 userData.assessmentComplete = false;
-                userData.assessmentAnswers = [];
+                userData.skills = { listening: 0, reading: 0, speaking: 0, writing: 0 };
                 saveUserData();
                 location.reload();
             }
         }
 
-        function resetData() {
-            if (confirm('⚠️ ATTENTION !\n\nSupprimer toutes vos données ?\n\nCette action est irréversible.')) {
-                if (confirm('Dernière confirmation : Êtes-vous sûr ?')) {
+        function resetAllData() {
+            if (confirm('⚠️ ATTENTION !\n\nSupprimer TOUTES les données locales ?\n\nCette action est IRRÉVERSIBLE.')) {
+                if (confirm('Dernière confirmation. Êtes-vous absolument sûr ?')) {
                     localStorage.clear();
                     location.reload();
                 }
             }
         }
 
-        // Initialize
-        window.onload = initApp;
+        // ============================================
+        // UTILITIES
+        // ============================================
 
-        // Auto-save
-        setInterval(saveUserData, 30000);
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+
+        window.onload = init;
+        setInterval(saveUserData, 60000); // Auto-save every minute
     </script>
 </body>
 </html>
