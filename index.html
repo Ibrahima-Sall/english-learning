@@ -1106,6 +1106,7 @@
     </div>
 
     <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <script>
         // ============================================
@@ -1147,6 +1148,7 @@
 
         let googleAuth = null;
         let driveFileId = null;
+        let googleAccessToken = null;
         const DRIVE_FILENAME = 'english-learning-data.json';
 
         // ============================================
@@ -1406,7 +1408,7 @@
 
         function saveUserData() {
             localStorage.setItem('englishData_v24', JSON.stringify(userData));
-            if (config.googleDriveEnabled && googleAuth && googleAuth.isSignedIn.get()) {
+            if (config.googleDriveEnabled && googleAccessToken) {
                 syncToGoogleDrive();
             }
         }
@@ -1429,7 +1431,7 @@
             const icon = document.getElementById('syncIcon');
             const text = document.getElementById('syncText');
             
-            if (config.googleDriveEnabled && googleAuth && googleAuth.isSignedIn.get()) {
+            if (config.googleDriveEnabled && googleAccessToken) {
                 icon.textContent = '✅';
                 text.textContent = 'Sync Google Drive';
             } else {
@@ -2184,22 +2186,24 @@
         }
 
         // ============================================
-        // GOOGLE DRIVE SYNC
+        // GOOGLE DRIVE SYNC - NEW GOOGLE IDENTITY SERVICES
         // ============================================
 
         function loadGoogleAPI() {
-            gapi.load('client:auth2', initGoogleClient);
+            gapi.load('client', initGoogleClient);
         }
 
         function initGoogleClient() {
             gapi.client.init({
                 apiKey: config.googleApiKey,
-                clientId: config.googleClientId,
-                discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
-                scope: 'https://www.googleapis.com/auth/drive.file'
+                discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest']
             }).then(() => {
-                googleAuth = gapi.auth2.getAuthInstance();
-                if (googleAuth.isSignedIn.get()) {
+                console.log('✅ Google API Client initialized');
+                // Check if we have a stored token
+                const storedToken = localStorage.getItem('googleAccessToken');
+                if (storedToken) {
+                    googleAccessToken = storedToken;
+                    gapi.client.setToken({ access_token: googleAccessToken });
                     updateSyncStatus();
                     syncFromGoogleDrive();
                 }
@@ -2222,38 +2226,64 @@
             config.googleDriveEnabled = true;
             saveConfig();
 
-            loadGoogleAPI();
+            // Initialize Google API if not already done
+            if (!gapi.client) {
+                loadGoogleAPI();
+            }
 
-            setTimeout(() => {
-                if (googleAuth) {
-                    googleAuth.signIn().then(() => {
-                        updateSyncStatus();
-                        document.getElementById('googleStatusText').textContent = 'Connecté';
-                        document.getElementById('googleConnectBtn').style.display = 'none';
-                        document.getElementById('googleDisconnectBtn').style.display = 'block';
-                        alert('✅ Connecté à Google Drive');
-                    }).catch(err => {
-                        alert('❌ Erreur de connexion: ' + err);
-                    });
+            // Use new Google Identity Services
+            const client = google.accounts.oauth2.initTokenClient({
+                client_id: clientId,
+                scope: 'https://www.googleapis.com/auth/drive.file',
+                callback: (response) => {
+                    if (response.error) {
+                        console.error('Auth error:', response);
+                        alert('❌ Erreur de connexion: ' + response.error);
+                        return;
+                    }
+                    
+                    googleAccessToken = response.access_token;
+                    localStorage.setItem('googleAccessToken', googleAccessToken);
+                    gapi.client.setToken({ access_token: googleAccessToken });
+                    
+                    config.googleDriveEnabled = true;
+                    saveConfig();
+                    updateSyncStatus();
+                    
+                    document.getElementById('googleStatusText').textContent = 'Connecté';
+                    document.getElementById('googleConnectBtn').style.display = 'none';
+                    document.getElementById('googleDisconnectBtn').style.display = 'block';
+                    
+                    alert('✅ Connecté à Google Drive');
+                    syncFromGoogleDrive();
                 }
-            }, 1000);
+            });
+
+            // Request access token
+            client.requestAccessToken({ prompt: 'consent' });
         }
 
         function disconnectGoogleDrive() {
-            if (googleAuth) {
-                googleAuth.signOut();
-                config.googleDriveEnabled = false;
-                saveConfig();
-                updateSyncStatus();
-                document.getElementById('googleStatusText').textContent = 'Déconnecté';
-                document.getElementById('googleConnectBtn').style.display = 'block';
-                document.getElementById('googleDisconnectBtn').style.display = 'none';
-                alert('✅ Déconnecté');
+            if (googleAccessToken) {
+                google.accounts.oauth2.revoke(googleAccessToken, () => {
+                    console.log('Token revoked');
+                });
             }
+            
+            googleAccessToken = null;
+            localStorage.removeItem('googleAccessToken');
+            config.googleDriveEnabled = false;
+            saveConfig();
+            updateSyncStatus();
+            
+            document.getElementById('googleStatusText').textContent = 'Déconnecté';
+            document.getElementById('googleConnectBtn').style.display = 'block';
+            document.getElementById('googleDisconnectBtn').style.display = 'none';
+            alert('✅ Déconnecté');
         }
 
         async function syncToGoogleDrive() {
-            if (!googleAuth || !googleAuth.isSignedIn.get()) return;
+            if (!googleAccessToken) return;
 
             try {
                 const dataToSave = {
@@ -2269,13 +2299,14 @@
                 } else {
                     driveFileId = await createDriveFile(file);
                 }
+                console.log('✅ Saved to Google Drive');
             } catch (err) {
                 console.error('Sync error:', err);
             }
         }
 
         async function syncFromGoogleDrive() {
-            if (!googleAuth || !googleAuth.isSignedIn.get()) return;
+            if (!googleAccessToken) return;
 
             try {
                 const fileId = await findDriveFile();
@@ -2288,6 +2319,7 @@
                         if (userData.assessmentComplete) {
                             showDashboard();
                         }
+                        console.log('✅ Loaded from Google Drive');
                     }
                 }
             } catch (err) {
@@ -2317,7 +2349,7 @@
 
             const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
                 method: 'POST',
-                headers: new Headers({ 'Authorization': 'Bearer ' + gapi.auth.getToken().access_token }),
+                headers: new Headers({ 'Authorization': 'Bearer ' + googleAccessToken }),
                 body: form
             });
 
@@ -2328,7 +2360,7 @@
         async function updateDriveFile(fileId, file) {
             await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
                 method: 'PATCH',
-                headers: new Headers({ 'Authorization': 'Bearer ' + gapi.auth.getToken().access_token }),
+                headers: new Headers({ 'Authorization': 'Bearer ' + googleAccessToken }),
                 body: file
             });
         }
@@ -2357,7 +2389,7 @@
             document.getElementById('statsXP').textContent = userData.xp;
             document.getElementById('statsAssessment').textContent = userData.assessmentComplete ? 'Oui' : 'Non';
 
-            if (config.googleDriveEnabled && googleAuth && googleAuth.isSignedIn.get()) {
+            if (config.googleDriveEnabled && googleAccessToken) {
                 document.getElementById('googleStatusText').textContent = 'Connecté';
                 document.getElementById('googleConnectBtn').style.display = 'none';
                 document.getElementById('googleDisconnectBtn').style.display = 'block';
